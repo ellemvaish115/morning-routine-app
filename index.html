@@ -223,9 +223,8 @@
   <div class="setup-eyebrow">One-time setup</div>
   <div class="setup-title">Connect to GitHub</div>
   <div class="setup-body">
-    Your data saves to <strong>ellemvaish115/morning-routine-app</strong> on GitHub.<br><br>
-    Paste a Personal Access Token with <code>repo</code> scope (or <code>contents: write</code> for fine-grained tokens).
-    It's stored on this device only — never committed to the repo.
+    To save your log to <strong>ellemvaish115/morning-routine-app</strong>, paste a GitHub Personal Access Token with <code>repo</code> scope (or <code>contents: write</code> for fine-grained tokens).<br><br>
+    Stored on this device only — never committed to the repo.
   </div>
   <input class="setup-input" id="setup-token-input" type="password" placeholder="github_pat_…" autocomplete="off" />
   <div class="setup-btn" onclick="connectGitHub()">Save &amp; Connect →</div>
@@ -490,14 +489,11 @@ function b64dec(str) {
   return decodeURIComponent(escape(atob(str)));
 }
 
+// Public read — no token needed for public repo; also caches the SHA for writes
 async function ghGet(filename) {
   try {
-    const res = await fetch(`${GH_API}/${filename}`, {
-      headers: {
-        Authorization: `token ${getToken()}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Cache-Control': 'no-cache'
-      }
+    const res = await fetch(`${GH_API}/${filename}?t=${Date.now()}`, {
+      headers: { Accept: 'application/vnd.github.v3+json' }
     });
     if (res.status === 404) return { sha: null, content: null };
     if (!res.ok) return null;
@@ -549,9 +545,15 @@ let dataTimer = null, dataChain = Promise.resolve();
 let strTimer  = null, strChain  = Promise.resolve();
 
 function saveData() {
+  if (!getToken()) { showSetup(); return; }
   clearTimeout(dataTimer);
   dataTimer = setTimeout(() => {
     dataChain = dataChain.then(async () => {
+      // Re-fetch SHA if we don't have it yet (e.g. token was just entered)
+      if (!dataSha) {
+        const r = await ghGet('data.json');
+        if (r) dataSha = r.sha;
+      }
       const sha = await ghPut('data.json', data, dataSha);
       if (sha) dataSha = sha;
     });
@@ -559,9 +561,14 @@ function saveData() {
 }
 
 function saveStrength() {
+  if (!getToken()) { showSetup(); return; }
   clearTimeout(strTimer);
   strTimer = setTimeout(() => {
     strChain = strChain.then(async () => {
+      if (!strengthSha) {
+        const r = await ghGet('strength.json');
+        if (r) strengthSha = r.sha;
+      }
       const sha = await ghPut('strength.json', sdata, strengthSha);
       if (sha) strengthSha = sha;
     });
@@ -901,13 +908,7 @@ function connectGitHub() {
 
 // ── INIT ──
 async function init() {
-  if (!getToken()) {
-    showSetup();
-    return;
-  }
-
-  showToast('Loading…');
-
+  // Reads work without a token on a public repo
   const [dr, sr] = await Promise.all([
     ghGet('data.json'),
     ghGet('strength.json')
