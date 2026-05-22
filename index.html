@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Morning OS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141416;
+    --surface2: #1c1c1f;
+    --border: #2a2a2e;
+    --text: #f0ede8;
+    --text-muted: #6b6870;
+    --text-dim: #3d3b42;
+    --resp: #e8a54b;
+    --resp-dim: #3d2e14;
+    --resp-glow: rgba(232,165,75,0.12);
+    --opt: #7ec8a0;
+    --opt-dim: #162a20;
+    --opt-glow: rgba(126,200,160,0.10);
+    --warn: #e85d4b;
+    --warn-dim: #3d1a14;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Instrument Sans', sans-serif; min-height: 100vh; padding: 0 0 80px 0; }
+
+  /* HEADER */
+  .header { padding: 44px 24px 20px; border-bottom: 1px solid var(--border); }
+  .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .header-title { font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1.1; color: var(--text); }
+  .header-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+  /* TABS */
+  .tab-row { display: flex; padding: 0 24px; border-bottom: 1px solid var(--border); }
+  .tab { flex: 1; padding: 12px 4px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+  .tab.active { color: var(--resp); border-bottom-color: var(--resp); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* PHASE BAR */
+  .phase-bar { margin: 16px 24px 0; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .phase-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--resp); flex-shrink: 0; box-shadow: 0 0 8px var(--resp); }
+  .phase-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--resp); }
+  .phase-desc { font-size: 11px; color: var(--text-muted); }
+
+  /* SECTION */
+  .section { padding: 20px 24px 0; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .section-tag { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; font-weight: 500; }
+  .section-tag.resp { background: var(--resp-dim); color: var(--resp); border: 1px solid rgba(232,165,75,0.2); }
+  .section-tag.opt { background: var(--opt-dim); color: var(--opt); border: 1px solid rgba(126,200,160,0.2); }
+  .section-rule { font-size: 11px; color: var(--text-muted); font-style: italic; }
+
+  /* MOVE SELECTOR */
+  .move-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .move-pill { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all 0.18s; -webkit-tap-highlight-color: transparent; user-select: none; display: flex; align-items: center; gap: 10px; }
+  .move-pill:active { transform: scale(0.97); }
+  .move-pill.selected-resp { background: var(--resp-glow); border-color: rgba(232,165,75,0.45); }
+  .move-pill.selected-opt { background: var(--opt-glow); border-color: rgba(126,200,160,0.35); }
+  .move-pill.selected-rest { background: var(--surface2); border-color: var(--border); }
+  .pill-icon { font-size: 16px; flex-shrink: 0; }
+  .pill-text { flex: 1; }
+  .pill-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .pill-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .move-pill.selected-resp .pill-name { color: var(--resp); }
+  .move-pill.selected-opt .pill-name { color: var(--opt); }
+
+  /* DIVIDER */
+  .divider { margin: 20px 24px 0; height: 1px; background: var(--border); position: relative; }
+  .divider::after { content: 'bonus'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: var(--bg); padding: 0 10px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+
+  /* BONUS CHECKBOXES */
+  .bonus-row { display: flex; gap: 8px; padding: 16px 24px 0; }
+  .bonus-chip { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 8px; text-align: center; cursor: pointer; transition: all 0.18s; -webkit-tap-highlight-color: transparent; user-select: none; }
+  .bonus-chip:active { transform: scale(0.96); }
+  .bonus-chip.checked { background: var(--opt-glow); border-color: rgba(126,200,160,0.35); }
+  .bonus-icon { font-size: 14px; margin-bottom: 3px; }
+  .bonus-name { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .bonus-chip.checked .bonus-name { color: var(--opt); }
+
+  /* FLOOR NOTE */
+  .floor-note { margin: 14px 24px 0; padding: 9px 13px; background: var(--surface2); border-radius: var(--radius-sm); border: 1px dashed var(--border); display: flex; gap: 8px; align-items: flex-start; }
+  .floor-text { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .floor-text strong { color: var(--resp); font-weight: 600; }
+
+  .save-note { margin: 14px 24px 0; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; }
+
+  /* WEEK TAB */
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 20px 24px 0; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 10px; text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 26px; line-height: 1; margin-bottom: 3px; }
+  .stat-num.amber { color: var(--resp); }
+  .stat-num.green { color: var(--opt); }
+  .stat-num.white { color: var(--text); }
+  .stat-num.warn { color: var(--warn); }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); line-height: 1.3; }
+
+  .week-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 10px; }
+  .week-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+  .week-arrows { display: flex; gap: 4px; }
+  .week-arrow { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+  .week-arrow:hover { border-color: var(--resp); color: var(--resp); }
+
+  .days-strip { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; padding: 0 24px; }
+  .day-pill { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .day-name { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; color: var(--text-dim); }
+  .day-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-muted); background: var(--surface2); border: 1.5px solid transparent; transition: all 0.2s; }
+  .day-pill.today .day-num { border-color: var(--resp); color: var(--resp); }
+  .day-dot-row { display: flex; gap: 2px; }
+  .day-micro { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+  .day-micro.done-resp { background: var(--resp); }
+  .day-micro.done-floor { background: var(--opt); }
+  .day-micro.done-rest { background: var(--text-dim); }
+  .day-micro.warn { background: var(--warn); }
+
+  /* 2-rest warning */
+  .rest-warn { margin: 12px 24px 0; background: var(--warn-dim); border: 1px solid rgba(232,93,75,0.3); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; gap: 8px; align-items: center; }
+  .rest-warn-text { font-size: 12px; color: #e8a09b; line-height: 1.4; }
+  .rest-warn-text strong { color: var(--warn); }
+
+  /* WEEK BREAKDOWN */
+  .week-breakdown { padding: 16px 24px 0; }
+  .breakdown-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .breakdown-day { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 52px; flex-shrink: 0; }
+  .breakdown-day.today-label { color: var(--resp); }
+  .breakdown-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .bp { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 7px; border-radius: 3px; }
+  .bp.resp { color: var(--resp); background: var(--resp-dim); }
+  .bp.opt { color: var(--opt); background: var(--opt-dim); }
+  .bp.rest { color: var(--text-muted); background: var(--surface2); font-style: italic; }
+  .bp.floor { color: var(--opt); background: var(--opt-dim); }
+  .bp.warn { color: var(--warn); background: var(--warn-dim); }
+
+  /* BOUNCE CARD */
+  .bounce-card { margin: 16px 24px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .bounce-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .rule-line { display: flex; gap: 10px; margin-bottom: 6px; align-items: flex-start; }
+  .rule-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--resp); flex-shrink: 0; margin-top: 2px; }
+  .rule-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .rule-text strong { color: var(--text); font-weight: 500; }
+
+  /* STRENGTH TAB */
+  .strength-intro { padding: 16px 24px 0; }
+  .strength-intro-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+  .lift-card { margin: 14px 24px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .lift-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
+  .lift-name { font-size: 15px; font-weight: 600; color: var(--text); }
+  .lift-goal-badge { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-muted); background: var(--surface2); padding: 3px 8px; border-radius: 4px; text-align: right; line-height: 1.4; }
+
+  /* PROGRESS BAR */
+  .lift-progress { padding: 10px 16px 12px; }
+  .prog-bar-bg { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+  .prog-bar-fill { height: 100%; border-radius: 2px; background: var(--resp); transition: width 0.6s ease; }
+  .prog-labels { display: flex; justify-content: space-between; }
+  .prog-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-muted); }
+  .prog-label.current { color: var(--resp); }
+
+  /* PR LOG */
+  .lift-log { padding: 0 16px 12px; }
+  .log-empty { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); font-style: italic; padding: 6px 0; }
+  .log-entry { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .log-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); width: 70px; flex-shrink: 0; }
+  .log-val { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text); flex: 1; }
+  .log-val.is-pr { color: var(--resp); }
+  .log-pr-tag { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--resp); background: var(--resp-dim); padding: 1px 6px; border-radius: 3px; }
+  .log-del { color: var(--text-dim); font-size: 12px; cursor: pointer; padding: 2px 4px; }
+  .log-del:hover { color: var(--warn); }
+
+  /* LOG FORM */
+  .lift-form { padding: 8px 16px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+  .lift-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; padding: 7px 10px; flex: 1; min-width: 0; outline: none; transition: border-color 0.2s; }
+  .lift-input:focus { border-color: var(--resp); }
+  .lift-input::placeholder { color: var(--text-dim); }
+  .lift-btn { background: var(--resp-dim); border: 1px solid rgba(232,165,75,0.3); border-radius: 6px; color: var(--resp); font-family: 'DM Mono', monospace; font-size: 11px; padding: 7px 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .lift-btn:hover { background: var(--resp); color: #0d0d0f; }
+
+  /* OS TAB */
+  .os-block { padding: 20px 24px 0; }
+  .os-section { margin-bottom: 20px; }
+  .os-section-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .os-item { font-size: 13px; color: var(--text-muted); line-height: 1.7; padding: 2px 0; }
+  .os-item strong { color: var(--text); font-weight: 500; }
+  .os-phase-row { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; }
+  .os-phase-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--resp); letter-spacing: 0.1em; margin-bottom: 3px; }
+  .os-phase-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .os-phase-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .os-phase-row.current { border-color: rgba(232,165,75,0.3); background: var(--resp-glow); }
+  .os-phase-row.current .os-phase-num::after { content: ' ← you are here'; color: var(--text-muted); font-style: italic; }
+  .os-callout { background: var(--surface); border-left: 3px solid var(--resp); border-radius: var(--radius-sm); padding: 14px 16px; }
+  .os-callout-head { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+  .os-callout-sub { font-size: 12px; color: var(--text-muted); font-style: italic; line-height: 1.5; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 9px 18px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 100; white-space: nowrap; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* SETUP OVERLAY */
+  .setup-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; padding: 60px 24px 40px; overflow-y: auto; flex-direction: column; justify-content: center; }
+  .setup-overlay.visible { display: flex; }
+  .setup-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--resp); margin-bottom: 10px; }
+  .setup-title { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text); margin-bottom: 16px; line-height: 1.2; }
+  .setup-body { font-size: 12px; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px; }
+  .setup-body strong { color: var(--text); font-weight: 500; }
+  .setup-body code { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--resp); background: var(--resp-dim); padding: 1px 5px; border-radius: 3px; }
+  .setup-input { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; padding: 12px 14px; width: 100%; margin-bottom: 10px; outline: none; transition: border-color 0.2s; }
+  .setup-input:focus { border-color: var(--resp); }
+  .setup-input::placeholder { color: var(--text-dim); }
+  .setup-btn { background: var(--resp-dim); border: 1px solid rgba(232,165,75,0.3); border-radius: 8px; color: var(--resp); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; padding: 13px; text-align: center; cursor: pointer; transition: all 0.2s; }
+  .setup-btn:hover { background: var(--resp); color: #0d0d0f; }
+  .setup-reset { margin-top: 28px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); cursor: pointer; }
+  .setup-reset:hover { color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- ══ SETUP OVERLAY ══ -->
+<div class="setup-overlay" id="setup-overlay">
+  <div class="setup-eyebrow">One-time setup</div>
+  <div class="setup-title">Connect to GitHub</div>
+  <div class="setup-body">
+    Your data saves to <strong>ellemvaish115/morning-routine-app</strong> on GitHub.<br><br>
+    Paste a Personal Access Token with <code>repo</code> scope (or <code>contents: write</code> for fine-grained tokens).
+    It's stored on this device only — never committed to the repo.
+  </div>
+  <input class="setup-input" id="setup-token-input" type="password" placeholder="github_pat_…" autocomplete="off" />
+  <div class="setup-btn" onclick="connectGitHub()">Save &amp; Connect →</div>
+  <div class="setup-reset" onclick="showSetup()">⚙ Change token</div>
+</div>
+
+<div class="header">
+  <div class="header-eyebrow">Phase 1 · Morning OS</div>
+  <div class="header-title">Show up.<br><em>That's enough.</em></div>
+  <div class="header-date" id="headerDate"></div>
+</div>
+
+<div class="tab-row">
+  <div class="tab active" onclick="switchTab('today')">Today</div>
+  <div class="tab" onclick="switchTab('week')">Week</div>
+  <div class="tab" onclick="switchTab('strength')">Strength</div>
+  <div class="tab" onclick="switchTab('os')">OS</div>
+</div>
+
+<!-- ══ TODAY ══ -->
+<div class="tab-content active" id="tab-today">
+  <div class="phase-bar">
+    <div class="phase-dot"></div>
+    <div>
+      <div class="phase-label">Phase 1 — Movement Daily</div>
+      <div class="phase-desc">One question: did you move today?</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag resp">Responsibility</span>
+      <span class="section-rule">pick one · this is the floor</span>
+    </div>
+    <div class="move-grid">
+      <div class="move-pill" id="pill-gym" onclick="selectMove('gym')">
+        <div class="pill-icon">🏋️</div>
+        <div class="pill-text">
+          <div class="pill-name">Gym</div>
+          <div class="pill-sub">Tue · Thu · Sat</div>
+        </div>
+      </div>
+      <div class="move-pill" id="pill-treadmill" onclick="selectMove('treadmill')">
+        <div class="pill-icon">🚶</div>
+        <div class="pill-text">
+          <div class="pill-name">Treadmill</div>
+          <div class="pill-sub">15 mins · other days</div>
+        </div>
+      </div>
+      <div class="move-pill" id="pill-floor" onclick="selectMove('floor')">
+        <div class="pill-icon">🌿</div>
+        <div class="pill-text">
+          <div class="pill-name">Floor</div>
+          <div class="pill-sub">Move, any amount</div>
+        </div>
+      </div>
+      <div class="move-pill" id="pill-rest" onclick="selectMove('rest')">
+        <div class="pill-icon">🌙</div>
+        <div class="pill-text">
+          <div class="pill-name">Rest</div>
+          <div class="pill-sub">One day · not a failure</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="floor-note">
+    <div class="floor-text"><strong>Floor rule:</strong> Sick, low, any day — go to the first floor and move for even 1 minute. That counts. Log Floor.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="bonus-row">
+    <div class="bonus-chip" id="bonus-wabi" onclick="toggleBonus('wabi')">
+      <div class="bonus-icon">🧹</div>
+      <div class="bonus-name">Wabi</div>
+    </div>
+    <div class="bonus-chip" id="bonus-sunpo" onclick="toggleBonus('sunpo')">
+      <div class="bonus-icon">☀️</div>
+      <div class="bonus-name">Sunpo</div>
+    </div>
+    <div class="bonus-chip" id="bonus-ma" onclick="toggleBonus('ma')">
+      <div class="bonus-icon">🍃</div>
+      <div class="bonus-name">Ma</div>
+    </div>
+  </div>
+
+  <div class="save-note" id="save-note">tap to log · syncs to github</div>
+</div>
+
+<!-- ══ WEEK ══ -->
+<div class="tab-content" id="tab-week">
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num amber" id="stat-streak">0</div>
+      <div class="stat-label">Move<br>Streak</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num white" id="stat-week">0/7</div>
+      <div class="stat-label">Moved<br>This Week</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num green" id="stat-bonus">0</div>
+      <div class="stat-label">Bonus<br>This Week</div>
+    </div>
+  </div>
+
+  <div id="rest-warn-banner" style="display:none">
+    <div class="rest-warn">
+      <div>🔴</div>
+      <div class="rest-warn-text"><strong>2 rest days in a row.</strong> Tomorrow: Floor rule. Just move — even 1 minute counts.</div>
+    </div>
+  </div>
+
+  <div class="week-nav">
+    <div class="week-label" id="weekRangeLabel">—</div>
+    <div class="week-arrows">
+      <div class="week-arrow" onclick="changeWeek(-1)">‹</div>
+      <div class="week-arrow" onclick="changeWeek(1)">›</div>
+    </div>
+  </div>
+  <div class="days-strip" id="weekGrid"></div>
+  <div class="week-breakdown" id="weekBreakdown"></div>
+
+  <div class="bounce-card">
+    <div class="bounce-title">Bounce-back protocol</div>
+    <div class="rule-line"><div class="rule-num">01</div><div class="rule-text"><strong>One rest day</strong> is not a failure. Log it, move on.</div></div>
+    <div class="rule-line"><div class="rule-num">02</div><div class="rule-text"><strong>Two rest days</strong> triggers floor rule on day three. Just move.</div></div>
+    <div class="rule-line"><div class="rule-num">03</div><div class="rule-text"><strong>Don't raise the bar</strong> after a good week. The floor stays the floor.</div></div>
+  </div>
+</div>
+
+<!-- ══ STRENGTH ══ -->
+<div class="tab-content" id="tab-strength">
+  <div class="strength-intro">
+    <div class="strength-intro-text">Loose goals. Log your best set when you do the lift. No pressure on gaps — the program changes monthly.</div>
+  </div>
+
+  <div class="lift-card">
+    <div class="lift-header">
+      <div class="lift-name">Deadlift</div>
+      <div class="lift-goal-badge">Year-end: 80kg / 5r<br>Interim: 60kg</div>
+    </div>
+    <div class="lift-progress" id="prog-deadlift"></div>
+    <div class="lift-log" id="log-deadlift"></div>
+    <div class="lift-form">
+      <input class="lift-input" id="input-deadlift" placeholder="e.g. 50kg / 6r" type="text" />
+      <div class="lift-btn" onclick="logLift('deadlift')">Log</div>
+    </div>
+  </div>
+
+  <div class="lift-card">
+    <div class="lift-header">
+      <div class="lift-name">Squat</div>
+      <div class="lift-goal-badge">Year-end: 60kg / 5r<br>Interim: 40kg</div>
+    </div>
+    <div class="lift-progress" id="prog-squat"></div>
+    <div class="lift-log" id="log-squat"></div>
+    <div class="lift-form">
+      <input class="lift-input" id="input-squat" placeholder="e.g. 30kg / 8r" type="text" />
+      <div class="lift-btn" onclick="logLift('squat')">Log</div>
+    </div>
+  </div>
+
+  <div class="lift-card">
+    <div class="lift-header">
+      <div class="lift-name">Push-up</div>
+      <div class="lift-goal-badge">Year-end: 15 full form<br>Interim: 8 full form</div>
+    </div>
+    <div class="lift-progress" id="prog-pushup"></div>
+    <div class="lift-log" id="log-pushup"></div>
+    <div class="lift-form">
+      <input class="lift-input" id="input-pushup" placeholder="e.g. 8 assisted / 5 full" type="text" />
+      <div class="lift-btn" onclick="logLift('pushup')">Log</div>
+    </div>
+  </div>
+
+  <div class="lift-card" style="margin-bottom:0">
+    <div class="lift-header">
+      <div class="lift-name">Pull-up</div>
+      <div class="lift-goal-badge">Year-end: 1 unassisted<br>then build</div>
+    </div>
+    <div class="lift-progress" id="prog-pullup"></div>
+    <div class="lift-log" id="log-pullup"></div>
+    <div class="lift-form">
+      <input class="lift-input" id="input-pullup" placeholder="e.g. 0 / band assisted / 1" type="text" />
+      <div class="lift-btn" onclick="logLift('pullup')">Log</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OS ══ -->
+<div class="tab-content" id="tab-os">
+  <div class="os-block">
+    <div class="os-section">
+      <div class="os-section-title">Where you are now</div>
+      <div class="os-item">✓ <strong>15 weeks of gym.</strong> The habit is built. Unfamiliar is gone.</div>
+      <div class="os-item">✓ <strong>Movement identity exists.</strong> You are a person who moves.</div>
+      <div class="os-item">✓ <strong>Ma is natural.</strong> Rest after movement happens almost daily.</div>
+      <div class="os-item">— <strong>Daily movement</strong> not yet automatic. In progress.</div>
+      <div class="os-item">— <strong>Wake-up anchor</strong> not yet built. That's Phase 2.</div>
+    </div>
+
+    <div class="os-section">
+      <div class="os-section-title">The three phases</div>
+      <div class="os-phase-row current">
+        <div class="os-phase-num">Phase 1</div>
+        <div class="os-phase-title">Movement Daily</div>
+        <div class="os-phase-desc">One metric: did you move today? Gym / treadmill / floor. Wake-up time doesn't count yet.</div>
+      </div>
+      <div class="os-phase-row">
+        <div class="os-phase-num">Phase 2</div>
+        <div class="os-phase-title">Wake-up Anchor</div>
+        <div class="os-phase-desc">Once daily movement is automatic — add one consistent morning trigger. A cue, not a time.</div>
+      </div>
+      <div class="os-phase-row">
+        <div class="os-phase-num">Phase 3</div>
+        <div class="os-phase-title">Full Routine</div>
+        <div class="os-phase-desc">Wabi and Sunpo fold in naturally. You're already up and moving.</div>
+      </div>
+    </div>
+
+    <div class="os-section">
+      <div class="os-section-title">What "showed up" means</div>
+      <div class="os-item"><strong>Full:</strong> Gym on gym days / treadmill on others</div>
+      <div class="os-item"><strong>Floor:</strong> Any movement, any duration, first floor</div>
+      <div class="os-item"><strong>Rest:</strong> One day. Logged. Not a failure.</div>
+      <div class="os-item" style="color:var(--text-dim);font-style:italic;font-size:12px;">Two rest days → floor rule on day three.</div>
+    </div>
+
+    <div class="os-section">
+      <div class="os-callout">
+        <div class="os-callout-head">You already became the gym person.<br>You're becoming the daily movement person.<br>Same process.</div>
+        <div class="os-callout-sub">You don't build discipline and then show up.<br>You show up imperfectly and discipline is what that becomes.</div>
+      </div>
+    </div>
+
+    <div class="os-section">
+      <div class="os-section-title">Storage</div>
+      <div class="os-item" style="font-size:12px;">Data syncs to <strong>ellemvaish115/morning-routine-app</strong> on GitHub.<br>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);cursor:pointer;" onclick="showSetup()">⚙ Change token</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── GITHUB CONFIG ──
+const GH_OWNER = 'ellemvaish115';
+const GH_REPO  = 'morning-routine-app';
+const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
+
+function getToken() { return localStorage.getItem('gh_token') || ''; }
+
+// ── GITHUB API HELPERS ──
+function b64enc(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64dec(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+
+async function ghGet(filename) {
+  try {
+    const res = await fetch(`${GH_API}/${filename}`, {
+      headers: {
+        Authorization: `token ${getToken()}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Cache-Control': 'no-cache'
+      }
+    });
+    if (res.status === 404) return { sha: null, content: null };
+    if (!res.ok) return null;
+    const json = await res.json();
+    return { sha: json.sha, content: JSON.parse(b64dec(json.content.replace(/\n/g, ''))) };
+  } catch { return null; }
+}
+
+async function ghPut(filename, content, sha) {
+  const body = {
+    message: `update ${filename}`,
+    content: b64enc(JSON.stringify(content, null, 2)),
+    ...(sha ? { sha } : {})
+  };
+  try {
+    const res = await fetch(`${GH_API}/${filename}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${getToken()}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) { showToast('⚠ Save failed'); return null; }
+    return (await res.json()).content.sha;
+  } catch { showToast('⚠ Network error'); return null; }
+}
+
+// ── DATA STATE ──
+const MOVE_OPTS  = ['gym','treadmill','floor','rest'];
+const BONUS_OPTS = ['wabi','sunpo','ma'];
+
+const LIFT_CONFIG = {
+  deadlift: { goalVal: 80, interimVal: 60, unit: 'kg'   },
+  squat:    { goalVal: 60, interimVal: 40, unit: 'kg'   },
+  pushup:   { goalVal: 15, interimVal: 8,  unit: 'reps' },
+  pullup:   { goalVal: 1,  interimVal: null, unit: 'reps' },
+};
+const LIFT_BASELINE = { deadlift: 45, squat: 20, pushup: 0, pullup: 0 };
+
+let data     = {};
+let sdata    = { deadlift: [], squat: [], pushup: [], pullup: [] };
+let dataSha     = null;
+let strengthSha = null;
+
+// Debounced save chains — prevents SHA conflicts on rapid taps
+let dataTimer = null, dataChain = Promise.resolve();
+let strTimer  = null, strChain  = Promise.resolve();
+
+function saveData() {
+  clearTimeout(dataTimer);
+  dataTimer = setTimeout(() => {
+    dataChain = dataChain.then(async () => {
+      const sha = await ghPut('data.json', data, dataSha);
+      if (sha) dataSha = sha;
+    });
+  }, 600);
+}
+
+function saveStrength() {
+  clearTimeout(strTimer);
+  strTimer = setTimeout(() => {
+    strChain = strChain.then(async () => {
+      const sha = await ghPut('strength.json', sdata, strengthSha);
+      if (sha) strengthSha = sha;
+    });
+  }, 600);
+}
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function getDayData(key) {
+  return data[key] || { move: null, wabi: false, sunpo: false, ma: false };
+}
+
+// ── TODAY ──
+const currentDay = todayKey();
+
+function renderToday() {
+  const d = getDayData(currentDay);
+  MOVE_OPTS.forEach(m => {
+    const p = document.getElementById('pill-'+m);
+    p.className = 'move-pill';
+    if (d.move === m) {
+      if (m === 'gym' || m === 'treadmill') p.classList.add('selected-resp');
+      else if (m === 'floor')              p.classList.add('selected-opt');
+      else                                 p.classList.add('selected-rest');
+    }
+  });
+  BONUS_OPTS.forEach(b => {
+    document.getElementById('bonus-'+b).classList.toggle('checked', !!d[b]);
+  });
+}
+
+function selectMove(m) {
+  if (!data[currentDay]) data[currentDay] = {};
+  data[currentDay].move = (data[currentDay].move === m) ? null : m;
+  renderToday();
+  renderWeekStats();
+  saveData();
+  const labels = { gym:'Gym ✓', treadmill:'Treadmill ✓', floor:'Floor ✓', rest:'Rest logged' };
+  if (data[currentDay].move) showToast(labels[m] || m);
+}
+
+function toggleBonus(b) {
+  if (!data[currentDay]) data[currentDay] = {};
+  data[currentDay][b] = !data[currentDay][b];
+  renderToday();
+  renderWeekStats();
+  saveData();
+  const n = b.charAt(0).toUpperCase()+b.slice(1);
+  showToast(data[currentDay][b] ? n+' ✓' : n+' off');
+}
+
+// ── HEADER DATE ──
+function setHeaderDate() {
+  const d = new Date();
+  const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('headerDate').textContent =
+    `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// ── WEEK ──
+let weekOffset = 0;
+
+function getWeekDates(offset) {
+  const today = new Date();
+  const dow    = today.getDay();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((dow+6)%7) + offset*7);
+  const dates = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+    dates.push(d);
+  }
+  return dates;
+}
+
+function dateToKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function changeWeek(dir) { weekOffset += dir; renderWeekStats(); }
+
+function renderWeekStats() {
+  const dates  = getWeekDates(weekOffset);
+  const todayK = todayKey();
+  const dayNames = ['M','T','W','T','F','S','S'];
+  const months   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  document.getElementById('weekRangeLabel').textContent =
+    `${dates[0].getDate()} ${months[dates[0].getMonth()]} – ${dates[6].getDate()} ${months[dates[6].getMonth()]}`;
+
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  let weekMoved = 0, weekBonus = 0;
+
+  dates.forEach((d, i) => {
+    const key   = dateToKey(d);
+    const dd    = getDayData(key);
+    const moved = dd.move === 'gym' || dd.move === 'treadmill' || dd.move === 'floor';
+    const isRest = dd.move === 'rest';
+    const bonus = (dd.wabi?1:0)+(dd.sunpo?1:0)+(dd.ma?1:0);
+    if (moved) weekMoved++;
+    weekBonus += bonus;
+
+    const pill    = document.createElement('div');
+    pill.className = 'day-pill' + (key === todayK ? ' today' : '');
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'day-name';
+    nameEl.textContent = dayNames[i];
+
+    const numEl = document.createElement('div');
+    numEl.className = 'day-num';
+    numEl.textContent = d.getDate();
+
+    const dotRow = document.createElement('div');
+    dotRow.className = 'day-dot-row';
+
+    const rd = document.createElement('div');
+    rd.className = 'day-micro' +
+      (dd.move === 'gym' || dd.move === 'treadmill' ? ' done-resp' :
+       dd.move === 'floor' ? ' done-floor' :
+       isRest ? ' done-rest' : '');
+    dotRow.appendChild(rd);
+
+    const od = document.createElement('div');
+    od.className = 'day-micro' + (bonus > 0 ? ' done-floor' : '');
+    dotRow.appendChild(od);
+
+    pill.appendChild(nameEl);
+    pill.appendChild(numEl);
+    pill.appendChild(dotRow);
+    grid.appendChild(pill);
+  });
+
+  document.getElementById('stat-week').textContent  = `${weekMoved}/7`;
+  document.getElementById('stat-bonus').textContent = weekBonus;
+
+  // Streak
+  let streak = 0;
+  const check  = new Date(); check.setHours(0,0,0,0);
+  const todayD = getDayData(todayK);
+  const todayMoved = todayD.move === 'gym' || todayD.move === 'treadmill' || todayD.move === 'floor';
+  if (!todayMoved) check.setDate(check.getDate()-1);
+  for (let i = 0; i < 365; i++) {
+    const k = dateToKey(check);
+    const dd = getDayData(k);
+    if (dd.move === 'gym' || dd.move === 'treadmill' || dd.move === 'floor') {
+      streak++;
+      check.setDate(check.getDate()-1);
+    } else break;
+  }
+  document.getElementById('stat-streak').textContent = streak;
+
+  // 2-rest warning
+  const y1 = new Date(); y1.setDate(y1.getDate()-1);
+  const y2 = new Date(); y2.setDate(y2.getDate()-2);
+  const d1 = getDayData(dateToKey(y1));
+  const d2 = getDayData(dateToKey(y2));
+  const twoRests = (d1.move === 'rest' || (!d1.move && dateToKey(y1) < todayK)) &&
+                   (d2.move === 'rest' || (!d2.move && dateToKey(y2) < todayK));
+  document.getElementById('rest-warn-banner').style.display =
+    (twoRests && !todayMoved) ? 'block' : 'none';
+
+  // Breakdown
+  const bd = document.getElementById('weekBreakdown');
+  bd.innerHTML = '';
+  dates.forEach((d, i) => {
+    const key    = dateToKey(d);
+    const dd     = getDayData(key);
+    const isFuture = d > new Date() && key !== todayK;
+    if (isFuture) return;
+
+    const row  = document.createElement('div');
+    row.className = 'breakdown-row';
+
+    const label  = document.createElement('div');
+    label.className = 'breakdown-day' + (key === todayK ? ' today-label' : '');
+    label.textContent = `${dayNames[i]} ${d.getDate()}`;
+
+    const pills = document.createElement('div');
+    pills.className = 'breakdown-pills';
+
+    const moveMap   = { gym:'Gym', treadmill:'Tread', floor:'Floor', rest:'Rest' };
+    const moveClass = { gym:'resp', treadmill:'resp', floor:'floor', rest:'rest' };
+
+    if (dd.move) {
+      const p = document.createElement('div');
+      p.className = 'bp ' + (moveClass[dd.move] || 'rest');
+      p.textContent = moveMap[dd.move] || dd.move;
+      pills.appendChild(p);
+    }
+
+    ['wabi','sunpo','ma'].forEach(b => {
+      if (dd[b]) {
+        const p = document.createElement('div');
+        p.className = 'bp opt';
+        p.textContent = b.charAt(0).toUpperCase()+b.slice(1);
+        pills.appendChild(p);
+      }
+    });
+
+    if (!dd.move && pills.children.length === 0) {
+      const p = document.createElement('div');
+      p.className = 'bp rest';
+      p.textContent = '—';
+      pills.appendChild(p);
+    }
+
+    row.appendChild(label);
+    row.appendChild(pills);
+    bd.appendChild(row);
+  });
+}
+
+// ── STRENGTH ──
+function renderStrength() {
+  ['deadlift','squat','pushup','pullup'].forEach(lift => {
+    renderLiftProgress(lift);
+    renderLiftLog(lift);
+  });
+}
+
+function renderLiftProgress(lift) {
+  const cfg      = LIFT_CONFIG[lift];
+  const baseline = LIFT_BASELINE[lift];
+  const entries  = sdata[lift];
+
+  let best = baseline;
+  entries.forEach(e => {
+    const match = e.val.match(/(\d+(\.\d+)?)/);
+    if (match) { const v = parseFloat(match[1]); if (v > best) best = v; }
+  });
+
+  const pct        = Math.min(100, Math.max(0, ((best - baseline) / (cfg.goalVal - baseline)) * 100));
+  const interimPct = cfg.interimVal
+    ? Math.min(100, ((cfg.interimVal - baseline) / (cfg.goalVal - baseline)) * 100)
+    : 0;
+
+  document.getElementById('prog-'+lift).innerHTML = `
+    <div class="prog-bar-bg" style="position:relative">
+      <div class="prog-bar-fill" style="width:${pct}%"></div>
+      ${cfg.interimVal ? `<div style="position:absolute;top:0;left:${interimPct}%;width:1px;height:100%;background:rgba(232,165,75,0.4)"></div>` : ''}
+    </div>
+    <div class="prog-labels">
+      <div class="prog-label current">${best}${cfg.unit === 'kg' ? 'kg' : ' reps'} now</div>
+      <div class="prog-label">→ ${cfg.interimVal ? cfg.interimVal+' interim · ' : ''}${cfg.goalVal} goal</div>
+    </div>
+  `;
+}
+
+function renderLiftLog(lift) {
+  const container = document.getElementById('log-'+lift);
+  const entries   = sdata[lift];
+
+  if (entries.length === 0) {
+    container.innerHTML = '<div class="log-empty">No entries yet</div>';
+    return;
+  }
+
+  const sorted  = [...entries].sort((a,b) => b.date.localeCompare(a.date));
+  const display = sorted.slice(0, 4);
+
+  let prVal = -1;
+  entries.forEach(e => {
+    const match = e.val.match(/(\d+(\.\d+)?)/);
+    if (match && parseFloat(match[1]) > prVal) prVal = parseFloat(match[1]);
+  });
+
+  container.innerHTML = display.map(e => {
+    const match = e.val.match(/(\d+(\.\d+)?)/);
+    const isPR  = match && parseFloat(match[1]) === prVal;
+    return `<div class="log-entry">
+      <div class="log-date">${e.date}</div>
+      <div class="log-val ${isPR ? 'is-pr' : ''}">${e.val}</div>
+      ${isPR ? '<div class="log-pr-tag">PR</div>' : ''}
+      <div class="log-del" onclick="deleteLift('${lift}','${e.id}')">×</div>
+    </div>`;
+  }).join('');
+}
+
+function logLift(lift) {
+  const input = document.getElementById('input-'+lift);
+  const val   = input.value.trim();
+  if (!val) return;
+
+  sdata[lift].push({ id: Date.now().toString(), date: todayKey().slice(5), val });
+  input.value = '';
+  renderStrength();
+  saveStrength();
+  showToast('Logged ✓');
+}
+
+function deleteLift(lift, id) {
+  sdata[lift] = sdata[lift].filter(e => e.id !== id);
+  renderStrength();
+  saveStrength();
+  showToast('Removed');
+}
+
+// ── TABS ──
+function switchTab(name) {
+  const names = ['today','week','strength','os'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name === 'week')     renderWeekStats();
+  if (name === 'strength') renderStrength();
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ── SETUP ──
+function showSetup() {
+  document.getElementById('setup-overlay').classList.add('visible');
+}
+
+function connectGitHub() {
+  const t = document.getElementById('setup-token-input').value.trim();
+  if (!t) return;
+  localStorage.setItem('gh_token', t);
+  document.getElementById('setup-overlay').classList.remove('visible');
+  init();
+}
+
+// ── INIT ──
+async function init() {
+  if (!getToken()) {
+    showSetup();
+    return;
+  }
+
+  showToast('Loading…');
+
+  const [dr, sr] = await Promise.all([
+    ghGet('data.json'),
+    ghGet('strength.json')
+  ]);
+
+  if (dr) { dataSha = dr.sha; if (dr.content) data = dr.content; }
+  if (sr) { strengthSha = sr.sha; if (sr.content) sdata = sr.content; }
+  ['deadlift','squat','pushup','pullup'].forEach(l => { if (!sdata[l]) sdata[l] = []; });
+
+  setHeaderDate();
+  renderToday();
+  renderWeekStats();
+}
+
+init();
+</script>
+</body>
+</html>
