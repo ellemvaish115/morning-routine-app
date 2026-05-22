@@ -1,0 +1,9 @@
+{
+  "2026-05-16": { "move": "rest", "wabi": false, "sunpo": false, "ma": false },
+  "2026-05-17": { "move": "rest", "wabi": false, "sunpo": false, "ma": false },
+  "2026-05-18": { "move": "rest", "wabi": false, "sunpo": false, "ma": false },
+  "2026-05-19": { "move": "gym", "wabi": false, "sunpo": false, "ma": true },
+  "2026-05-20": { "move": "treadmill", "wabi": false, "sunpo": false, "ma": true },
+  "2026-05-21": { "move": "gym", "wabi": false, "sunpo": false, "ma": true },
+  "2026-05-22": { "move": "rest", "wabi": false, "sunpo": false, "ma": false }
+}
