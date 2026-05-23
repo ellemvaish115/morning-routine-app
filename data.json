@@ -42,6 +42,7 @@
     "ma": false
   },
   "2026-05-23": {
-    "move": "gym"
+    "move": "gym",
+    "ma": true
   }
 }
