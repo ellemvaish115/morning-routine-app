@@ -46,6 +46,7 @@
     "ma": true
   },
   "2026-05-24": {
-    "wabi": true
+    "wabi": true,
+    "move": "rest"
   }
 }
