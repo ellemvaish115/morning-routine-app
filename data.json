@@ -56,6 +56,7 @@
     "ma": true
   },
   "2026-05-26": {
-    "move": "gym"
+    "move": "gym",
+    "wabi": true
   }
 }
