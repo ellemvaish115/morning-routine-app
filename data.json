@@ -48,5 +48,11 @@
   "2026-05-24": {
     "wabi": true,
     "move": "rest"
+  },
+  "2026-05-25": {
+    "move": "treadmill",
+    "wabi": false,
+    "sunpo": false,
+    "ma": true
   }
 }
