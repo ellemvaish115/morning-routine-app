@@ -61,6 +61,8 @@
     "ma": true
   },
   "2026-05-27": {
-    "move": "rest"
+    "move": "rest",
+    "wakeTime": "8:30",
+    "wakeHow": "lay"
   }
 }
