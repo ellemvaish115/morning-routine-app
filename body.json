@@ -1,8 +1,14 @@
 {
+  "2026-05-06": {
+    "bloat": null,
+    "cycleStart": true,
+    "firstMeal": null,
+    "lastMeal": null
+  },
   "2026-05-27": {
     "bloat": "mild"
   },
   "2026-05-28": {
-    "cycleStart": true
+    "cycleStart": false
   }
 }
