@@ -35,8 +35,8 @@
   .header-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 5px; }
 
   /* TABS */
-  .tab-row { display: flex; padding: 0 24px; border-bottom: 1px solid var(--border); }
-  .tab { flex: 1; padding: 12px 4px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+  .tab-row { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); }
+  .tab { flex: 1; padding: 12px 2px; text-align: center; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
   .tab.active { color: var(--resp); border-bottom-color: var(--resp); }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
@@ -69,6 +69,25 @@
   .move-pill.selected-resp .pill-name { color: var(--resp); }
   .move-pill.selected-opt .pill-name { color: var(--opt); }
 
+  /* FLOOR NOTE */
+  .floor-note { margin: 14px 24px 0; padding: 9px 13px; background: var(--surface2); border-radius: var(--radius-sm); border: 1px dashed var(--border); display: flex; gap: 8px; align-items: flex-start; }
+  .floor-text { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .floor-text strong { color: var(--resp); font-weight: 600; }
+
+  /* WAKE SECTION */
+  .wake-section { margin: 16px 24px 0; }
+  .wake-section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .wake-row-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-bottom: 7px; }
+  .wake-time-row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -24px; padding: 2px 24px 4px; }
+  .wake-time-row::-webkit-scrollbar { display: none; }
+  .wake-how-col { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+
+  /* NEUTRAL CHIPS */
+  .n-chip { background: var(--surface); border: 1.5px solid var(--border); border-radius: 6px; padding: 7px 11px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); cursor: pointer; transition: all 0.18s; user-select: none; -webkit-tap-highlight-color: transparent; white-space: nowrap; display: inline-block; }
+  .wake-time-row .n-chip { flex-shrink: 0; }
+  .n-chip:active { transform: scale(0.95); }
+  .n-chip.selected { background: var(--surface2); border-color: #4a474f; color: var(--text); }
+
   /* DIVIDER */
   .divider { margin: 20px 24px 0; height: 1px; background: var(--border); position: relative; }
   .divider::after { content: 'bonus'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: var(--bg); padding: 0 10px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
@@ -82,11 +101,6 @@
   .bonus-name { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
   .bonus-chip.checked .bonus-name { color: var(--opt); }
 
-  /* FLOOR NOTE */
-  .floor-note { margin: 14px 24px 0; padding: 9px 13px; background: var(--surface2); border-radius: var(--radius-sm); border: 1px dashed var(--border); display: flex; gap: 8px; align-items: flex-start; }
-  .floor-text { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
-  .floor-text strong { color: var(--resp); font-weight: 600; }
-
   .save-note { margin: 14px 24px 0; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; }
 
   /* WEEK TAB */
@@ -96,7 +110,6 @@
   .stat-num.amber { color: var(--resp); }
   .stat-num.green { color: var(--opt); }
   .stat-num.white { color: var(--text); }
-  .stat-num.warn { color: var(--warn); }
   .stat-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); line-height: 1.3; }
 
   .week-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 10px; }
@@ -106,7 +119,7 @@
   .week-arrow:hover { border-color: var(--resp); color: var(--resp); }
 
   .days-strip { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; padding: 0 24px; }
-  .day-pill { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .day-pill { display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .day-name { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; color: var(--text-dim); }
   .day-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text-muted); background: var(--surface2); border: 1.5px solid transparent; transition: all 0.2s; }
   .day-pill.today .day-num { border-color: var(--resp); color: var(--resp); }
@@ -115,7 +128,6 @@
   .day-micro.done-resp { background: var(--resp); }
   .day-micro.done-floor { background: var(--opt); }
   .day-micro.done-rest { background: var(--text-dim); }
-  .day-micro.warn { background: var(--warn); }
 
   /* 2-rest warning */
   .rest-warn { margin: 12px 24px 0; background: var(--warn-dim); border: 1px solid rgba(232,93,75,0.3); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; gap: 8px; align-items: center; }
@@ -124,16 +136,20 @@
 
   /* WEEK BREAKDOWN */
   .week-breakdown { padding: 16px 24px 0; }
-  .breakdown-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .breakdown-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
   .breakdown-day { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); width: 52px; flex-shrink: 0; }
   .breakdown-day.today-label { color: var(--resp); }
-  .breakdown-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .breakdown-pills { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; flex: 1; }
   .bp { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 7px; border-radius: 3px; }
   .bp.resp { color: var(--resp); background: var(--resp-dim); }
   .bp.opt { color: var(--opt); background: var(--opt-dim); }
   .bp.rest { color: var(--text-muted); background: var(--surface2); font-style: italic; }
   .bp.floor { color: var(--opt); background: var(--opt-dim); }
-  .bp.warn { color: var(--warn); background: var(--warn-dim); }
+  /* body dots in breakdown */
+  .bp-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .bp-dot.bloat-mild { background: #4a474f; }
+  .bp-dot.bloat-bloated { background: var(--text-muted); }
+  .bp-dot.period { background: var(--text-muted); outline: 1px solid var(--text-dim); outline-offset: 1px; }
 
   /* BOUNCE CARD */
   .bounce-card { margin: 16px 24px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
@@ -146,21 +162,16 @@
   /* STRENGTH TAB */
   .strength-intro { padding: 16px 24px 0; }
   .strength-intro-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-
   .lift-card { margin: 14px 24px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
   .lift-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
   .lift-name { font-size: 15px; font-weight: 600; color: var(--text); }
   .lift-goal-badge { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-muted); background: var(--surface2); padding: 3px 8px; border-radius: 4px; text-align: right; line-height: 1.4; }
-
-  /* PROGRESS BAR */
   .lift-progress { padding: 10px 16px 12px; }
   .prog-bar-bg { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
   .prog-bar-fill { height: 100%; border-radius: 2px; background: var(--resp); transition: width 0.6s ease; }
   .prog-labels { display: flex; justify-content: space-between; }
   .prog-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-muted); }
   .prog-label.current { color: var(--resp); }
-
-  /* PR LOG */
   .lift-log { padding: 0 16px 12px; }
   .log-empty { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); font-style: italic; padding: 6px 0; }
   .log-entry { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); }
@@ -170,14 +181,24 @@
   .log-pr-tag { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--resp); background: var(--resp-dim); padding: 1px 6px; border-radius: 3px; }
   .log-del { color: var(--text-dim); font-size: 12px; cursor: pointer; padding: 2px 4px; }
   .log-del:hover { color: var(--warn); }
-
-  /* LOG FORM */
   .lift-form { padding: 8px 16px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
   .lift-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; padding: 7px 10px; flex: 1; min-width: 0; outline: none; transition: border-color 0.2s; }
   .lift-input:focus { border-color: var(--resp); }
   .lift-input::placeholder { color: var(--text-dim); }
   .lift-btn { background: var(--resp-dim); border: 1px solid rgba(232,165,75,0.3); border-radius: 6px; color: var(--resp); font-family: 'DM Mono', monospace; font-size: 11px; padding: 7px 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
   .lift-btn:hover { background: var(--resp); color: #0d0d0f; }
+
+  /* BODY TAB */
+  .body-date-toggle { display: flex; margin: 16px 24px 0; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 3px; gap: 3px; }
+  .bdt-opt { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); padding: 8px 4px; border-radius: 5px; cursor: pointer; transition: all 0.2s; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .bdt-opt.active { background: var(--surface); color: var(--text); }
+  .body-section { padding: 20px 24px 0; }
+  .body-section-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .body-sub-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-bottom: 7px; }
+  .n-chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cycle-btn { background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text-muted); cursor: pointer; transition: all 0.18s; user-select: none; -webkit-tap-highlight-color: transparent; width: 100%; text-align: left; }
+  .cycle-btn:active { transform: scale(0.98); background: var(--surface2); }
+  .cycle-info { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 8px; }
 
   /* OS TAB */
   .os-block { padding: 20px 24px 0; }
@@ -241,6 +262,7 @@
   <div class="tab active" onclick="switchTab('today')">Today</div>
   <div class="tab" onclick="switchTab('week')">Week</div>
   <div class="tab" onclick="switchTab('strength')">Strength</div>
+  <div class="tab" onclick="switchTab('body')">Body</div>
   <div class="tab" onclick="switchTab('os')">OS</div>
 </div>
 
@@ -295,6 +317,19 @@
     <div class="floor-text"><strong>Floor rule:</strong> Sick, low, any day — go to the first floor and move for even 1 minute. That counts. Log Floor.</div>
   </div>
 
+  <!-- WAKE LOG -->
+  <div class="wake-section">
+    <div class="wake-section-label">Morning wake</div>
+    <div class="wake-row-label">Woke up at</div>
+    <div class="wake-time-row" id="wake-time-row"></div>
+    <div class="wake-row-label" style="margin-top:12px;">Then</div>
+    <div class="wake-how-col">
+      <div class="n-chip wake-how-chip" data-val="straight" onclick="selectWakeHow('straight')">Up straight away</div>
+      <div class="n-chip wake-how-chip" data-val="neg10" onclick="selectWakeHow('neg10')">Negotiated — within 10 min</div>
+      <div class="n-chip wake-how-chip" data-val="longer" onclick="selectWakeHow('longer')">Negotiated — took longer</div>
+    </div>
+  </div>
+
   <div class="divider"></div>
 
   <div class="bonus-row">
@@ -312,7 +347,7 @@
     </div>
   </div>
 
-  <div class="save-note" id="save-note">tap to log · syncs to github</div>
+  <div class="save-note">tap to log · syncs to github</div>
 </div>
 
 <!-- ══ WEEK ══ -->
@@ -416,6 +451,51 @@
   </div>
 </div>
 
+<!-- ══ BODY ══ -->
+<div class="tab-content" id="tab-body">
+
+  <div class="body-date-toggle">
+    <div class="bdt-opt active" id="bdt-today" onclick="selectBodyDate('today')">Today</div>
+    <div class="bdt-opt" id="bdt-yesterday" onclick="selectBodyDate('yesterday')">Yesterday</div>
+  </div>
+
+  <!-- Bloat -->
+  <div class="body-section">
+    <div class="body-section-title">Bloat</div>
+    <div class="n-chip-row">
+      <div class="n-chip" id="bl-none"    onclick="selectBloat('none')">None</div>
+      <div class="n-chip" id="bl-mild"    onclick="selectBloat('mild')">Mild</div>
+      <div class="n-chip" id="bl-bloated" onclick="selectBloat('bloated')">Bloated</div>
+    </div>
+  </div>
+
+  <!-- Cycle -->
+  <div class="body-section">
+    <div class="body-section-title">Cycle</div>
+    <div class="cycle-btn" onclick="logCycle()">Log period start today</div>
+    <div class="cycle-info" id="cycle-info">No period start logged yet</div>
+  </div>
+
+  <!-- Food rhythm -->
+  <div class="body-section">
+    <div class="body-section-title">Food rhythm</div>
+    <div class="body-sub-label">First meal</div>
+    <div class="n-chip-row">
+      <div class="n-chip" id="fm-before-9" onclick="selectFirstMeal('before-9')">Before 9am</div>
+      <div class="n-chip" id="fm-9-11"     onclick="selectFirstMeal('9-11')">9–11am</div>
+      <div class="n-chip" id="fm-11-1"     onclick="selectFirstMeal('11-1')">11am–1pm</div>
+      <div class="n-chip" id="fm-after-1"  onclick="selectFirstMeal('after-1')">After 1pm or skipped</div>
+    </div>
+    <div class="body-sub-label" style="margin-top:14px;">Last meal</div>
+    <div class="n-chip-row">
+      <div class="n-chip" id="lm-before-7" onclick="selectLastMeal('before-7')">Before 7pm</div>
+      <div class="n-chip" id="lm-7-9"      onclick="selectLastMeal('7-9')">7–9pm</div>
+      <div class="n-chip" id="lm-after-9"  onclick="selectLastMeal('after-9')">After 9pm</div>
+    </div>
+  </div>
+
+</div>
+
 <!-- ══ OS ══ -->
 <div class="tab-content" id="tab-os">
   <div class="os-block">
@@ -481,15 +561,9 @@ const GH_API   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
 
 function getToken() { return localStorage.getItem('gh_token') || ''; }
 
-// ── GITHUB API HELPERS ──
-function b64enc(str) {
-  return btoa(unescape(encodeURIComponent(str)));
-}
-function b64dec(str) {
-  return decodeURIComponent(escape(atob(str)));
-}
+function b64enc(str) { return btoa(unescape(encodeURIComponent(str))); }
+function b64dec(str) { return decodeURIComponent(escape(atob(str))); }
 
-// Public read — no token needed for public repo; also caches the SHA for writes
 async function ghGet(filename) {
   try {
     const res = await fetch(`${GH_API}/${filename}?t=${Date.now()}`, {
@@ -537,23 +611,21 @@ const LIFT_BASELINE = { deadlift: 45, squat: 20, pushup: 0, pullup: 0 };
 
 let data     = {};
 let sdata    = { deadlift: [], squat: [], pushup: [], pullup: [] };
+let bdata    = {};
 let dataSha     = null;
 let strengthSha = null;
+let bodySha     = null;
 
-// Debounced save chains — prevents SHA conflicts on rapid taps
 let dataTimer = null, dataChain = Promise.resolve();
 let strTimer  = null, strChain  = Promise.resolve();
+let bodyTimer = null, bodyChain = Promise.resolve();
 
 function saveData() {
   if (!getToken()) { showSetup(); return; }
   clearTimeout(dataTimer);
   dataTimer = setTimeout(() => {
     dataChain = dataChain.then(async () => {
-      // Re-fetch SHA if we don't have it yet (e.g. token was just entered)
-      if (!dataSha) {
-        const r = await ghGet('data.json');
-        if (r) dataSha = r.sha;
-      }
+      if (!dataSha) { const r = await ghGet('data.json'); if (r) dataSha = r.sha; }
       const sha = await ghPut('data.json', data, dataSha);
       if (sha) dataSha = sha;
     });
@@ -565,12 +637,21 @@ function saveStrength() {
   clearTimeout(strTimer);
   strTimer = setTimeout(() => {
     strChain = strChain.then(async () => {
-      if (!strengthSha) {
-        const r = await ghGet('strength.json');
-        if (r) strengthSha = r.sha;
-      }
+      if (!strengthSha) { const r = await ghGet('strength.json'); if (r) strengthSha = r.sha; }
       const sha = await ghPut('strength.json', sdata, strengthSha);
       if (sha) strengthSha = sha;
+    });
+  }, 600);
+}
+
+function saveBody() {
+  if (!getToken()) { showSetup(); return; }
+  clearTimeout(bodyTimer);
+  bodyTimer = setTimeout(() => {
+    bodyChain = bodyChain.then(async () => {
+      if (!bodySha) { const r = await ghGet('body.json'); if (r) bodySha = r.sha; }
+      const sha = await ghPut('body.json', bdata, bodySha);
+      if (sha) bodySha = sha;
     });
   }, 600);
 }
@@ -580,8 +661,16 @@ function todayKey() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
+function dateToKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
 function getDayData(key) {
   return data[key] || { move: null, wabi: false, sunpo: false, ma: false };
+}
+
+function getBodyData(key) {
+  return bdata[key] || { bloat: null, cycleStart: false, firstMeal: null, lastMeal: null };
 }
 
 // ── TODAY ──
@@ -601,6 +690,7 @@ function renderToday() {
   BONUS_OPTS.forEach(b => {
     document.getElementById('bonus-'+b).classList.toggle('checked', !!d[b]);
   });
+  renderWakeLog();
 }
 
 function selectMove(m) {
@@ -621,6 +711,43 @@ function toggleBonus(b) {
   saveData();
   const n = b.charAt(0).toUpperCase()+b.slice(1);
   showToast(data[currentDay][b] ? n+' ✓' : n+' off');
+}
+
+// ── WAKE LOG ──
+function buildWakeTimeChips() {
+  const row = document.getElementById('wake-time-row');
+  const times = [];
+  for (let h = 5; h <= 12; h++) {
+    times.push(`${h}:00`);
+    if (h < 12) times.push(`${h}:30`);
+  }
+  row.innerHTML = times.map(t =>
+    `<div class="n-chip wake-time-chip" data-val="${t}" onclick="selectWakeTime('${t}')">${t}</div>`
+  ).join('');
+}
+
+function renderWakeLog() {
+  const d = getDayData(currentDay);
+  document.querySelectorAll('.wake-time-chip').forEach(c => {
+    c.classList.toggle('selected', c.dataset.val === d.wakeTime);
+  });
+  document.querySelectorAll('.wake-how-chip').forEach(c => {
+    c.classList.toggle('selected', c.dataset.val === d.wakeHow);
+  });
+}
+
+function selectWakeTime(val) {
+  if (!data[currentDay]) data[currentDay] = {};
+  data[currentDay].wakeTime = (data[currentDay].wakeTime === val) ? null : val;
+  renderWakeLog();
+  saveData();
+}
+
+function selectWakeHow(val) {
+  if (!data[currentDay]) data[currentDay] = {};
+  data[currentDay].wakeHow = (data[currentDay].wakeHow === val) ? null : val;
+  renderWakeLog();
+  saveData();
 }
 
 // ── HEADER DATE ──
@@ -649,10 +776,6 @@ function getWeekDates(offset) {
   return dates;
 }
 
-function dateToKey(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-
 function changeWeek(dir) { weekOffset += dir; renderWeekStats(); }
 
 function renderWeekStats() {
@@ -669,15 +792,15 @@ function renderWeekStats() {
   let weekMoved = 0, weekBonus = 0;
 
   dates.forEach((d, i) => {
-    const key   = dateToKey(d);
-    const dd    = getDayData(key);
-    const moved = dd.move === 'gym' || dd.move === 'treadmill' || dd.move === 'floor';
+    const key    = dateToKey(d);
+    const dd     = getDayData(key);
+    const moved  = dd.move === 'gym' || dd.move === 'treadmill' || dd.move === 'floor';
     const isRest = dd.move === 'rest';
-    const bonus = (dd.wabi?1:0)+(dd.sunpo?1:0)+(dd.ma?1:0);
+    const bonus  = (dd.wabi?1:0)+(dd.sunpo?1:0)+(dd.ma?1:0);
     if (moved) weekMoved++;
     weekBonus += bonus;
 
-    const pill    = document.createElement('div');
+    const pill = document.createElement('div');
     pill.className = 'day-pill' + (key === todayK ? ' today' : '');
 
     const nameEl = document.createElement('div');
@@ -713,16 +836,15 @@ function renderWeekStats() {
 
   // Streak
   let streak = 0;
-  const check  = new Date(); check.setHours(0,0,0,0);
-  const todayD = getDayData(todayK);
+  const check    = new Date(); check.setHours(0,0,0,0);
+  const todayD   = getDayData(todayK);
   const todayMoved = todayD.move === 'gym' || todayD.move === 'treadmill' || todayD.move === 'floor';
   if (!todayMoved) check.setDate(check.getDate()-1);
   for (let i = 0; i < 365; i++) {
     const k = dateToKey(check);
     const dd = getDayData(k);
     if (dd.move === 'gym' || dd.move === 'treadmill' || dd.move === 'floor') {
-      streak++;
-      check.setDate(check.getDate()-1);
+      streak++; check.setDate(check.getDate()-1);
     } else break;
   }
   document.getElementById('stat-streak').textContent = streak;
@@ -741,15 +863,16 @@ function renderWeekStats() {
   const bd = document.getElementById('weekBreakdown');
   bd.innerHTML = '';
   dates.forEach((d, i) => {
-    const key    = dateToKey(d);
-    const dd     = getDayData(key);
+    const key      = dateToKey(d);
+    const dd       = getDayData(key);
+    const bdd      = getBodyData(key);
     const isFuture = d > new Date() && key !== todayK;
     if (isFuture) return;
 
-    const row  = document.createElement('div');
+    const row = document.createElement('div');
     row.className = 'breakdown-row';
 
-    const label  = document.createElement('div');
+    const label = document.createElement('div');
     label.className = 'breakdown-day' + (key === todayK ? ' today-label' : '');
     label.textContent = `${dayNames[i]} ${d.getDate()}`;
 
@@ -780,6 +903,18 @@ function renderWeekStats() {
       p.className = 'bp rest';
       p.textContent = '—';
       pills.appendChild(p);
+    }
+
+    // Body dots
+    if (bdd.bloat === 'mild' || bdd.bloat === 'bloated') {
+      const dot = document.createElement('div');
+      dot.className = 'bp-dot ' + (bdd.bloat === 'bloated' ? 'bloat-bloated' : 'bloat-mild');
+      pills.appendChild(dot);
+    }
+    if (bdd.cycleStart) {
+      const dot = document.createElement('div');
+      dot.className = 'bp-dot period';
+      pills.appendChild(dot);
     }
 
     row.appendChild(label);
@@ -858,7 +993,6 @@ function logLift(lift) {
   const input = document.getElementById('input-'+lift);
   const val   = input.value.trim();
   if (!val) return;
-
   sdata[lift].push({ id: Date.now().toString(), date: todayKey().slice(5), val });
   input.value = '';
   renderStrength();
@@ -873,14 +1007,88 @@ function deleteLift(lift, id) {
   showToast('Removed');
 }
 
+// ── BODY TAB ──
+let bodyDateKey = todayKey();
+
+function selectBodyDate(which) {
+  const yest = new Date(); yest.setDate(yest.getDate()-1);
+  bodyDateKey = which === 'yesterday' ? dateToKey(yest) : todayKey();
+  document.getElementById('bdt-today').classList.toggle('active', which === 'today');
+  document.getElementById('bdt-yesterday').classList.toggle('active', which === 'yesterday');
+  renderBody();
+}
+
+function renderBody() {
+  const bd = getBodyData(bodyDateKey);
+
+  // Bloat
+  ['none','mild','bloated'].forEach(v => {
+    document.getElementById('bl-'+v).classList.toggle('selected', bd.bloat === v);
+  });
+
+  // Cycle — always shows last logged across all entries, always logs to today
+  const lastCycle = Object.keys(bdata).filter(k => bdata[k].cycleStart).sort().pop();
+  const cycleInfo = document.getElementById('cycle-info');
+  if (lastCycle) {
+    const msPerDay = 86400000;
+    const days = Math.round((new Date(todayKey()) - new Date(lastCycle)) / msPerDay);
+    const label = days === 0 ? 'today' : days === 1 ? '1 day ago' : `${days} days ago`;
+    cycleInfo.textContent = `Last: ${lastCycle} · ${label}`;
+  } else {
+    cycleInfo.textContent = 'No period start logged yet';
+  }
+
+  // First meal
+  ['before-9','9-11','11-1','after-1'].forEach(v => {
+    document.getElementById('fm-'+v).classList.toggle('selected', bd.firstMeal === v);
+  });
+
+  // Last meal
+  ['before-7','7-9','after-9'].forEach(v => {
+    document.getElementById('lm-'+v).classList.toggle('selected', bd.lastMeal === v);
+  });
+}
+
+function selectBloat(val) {
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  bdata[bodyDateKey].bloat = (bdata[bodyDateKey].bloat === val) ? null : val;
+  renderBody();
+  saveBody();
+  showToast(val.charAt(0).toUpperCase()+val.slice(1)+' ✓');
+}
+
+function logCycle() {
+  const today = todayKey();
+  if (!bdata[today]) bdata[today] = {};
+  bdata[today].cycleStart = true;
+  renderBody();
+  saveBody();
+  showToast('Period start logged');
+}
+
+function selectFirstMeal(val) {
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  bdata[bodyDateKey].firstMeal = (bdata[bodyDateKey].firstMeal === val) ? null : val;
+  renderBody();
+  saveBody();
+}
+
+function selectLastMeal(val) {
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  bdata[bodyDateKey].lastMeal = (bdata[bodyDateKey].lastMeal === val) ? null : val;
+  renderBody();
+  saveBody();
+}
+
 // ── TABS ──
 function switchTab(name) {
-  const names = ['today','week','strength','os'];
+  const names = ['today','week','strength','body','os'];
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if (name === 'week')     renderWeekStats();
   if (name === 'strength') renderStrength();
+  if (name === 'body')     renderBody();
 }
 
 // ── TOAST ──
@@ -908,14 +1116,17 @@ function connectGitHub() {
 
 // ── INIT ──
 async function init() {
-  // Reads work without a token on a public repo
-  const [dr, sr] = await Promise.all([
+  buildWakeTimeChips();
+
+  const [dr, sr, br] = await Promise.all([
     ghGet('data.json'),
-    ghGet('strength.json')
+    ghGet('strength.json'),
+    ghGet('body.json')
   ]);
 
   if (dr) { dataSha = dr.sha; if (dr.content) data = dr.content; }
   if (sr) { strengthSha = sr.sha; if (sr.content) sdata = sr.content; }
+  if (br) { bodySha = br.sha; if (br.content) bdata = br.content; }
   ['deadlift','squat','pushup','pullup'].forEach(l => { if (!sdata[l]) sdata[l] = []; });
 
   setHeaderDate();
