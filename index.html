@@ -235,6 +235,20 @@
   .setup-btn:hover { background: var(--resp); color: #0d0d0f; }
   .setup-reset { margin-top: 28px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); cursor: pointer; }
   .setup-reset:hover { color: var(--text-muted); }
+
+  /* PHASE 2 READINESS GRAPH */
+  .p2-card { margin: 16px 24px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .p2-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+  .p2-scroll { overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 4px; }
+  .p2-scroll::-webkit-scrollbar { display: none; }
+  .p2-counter { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 10px; }
+  .p2-banner { margin-top: 10px; background: var(--opt-dim); border: 1px solid rgba(126,200,160,0.3); border-radius: var(--radius-sm); padding: 10px 12px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--opt); line-height: 1.6; letter-spacing: 0.03em; }
+
+  /* OS READINESS */
+  .os-readiness { margin-top: 10px; padding: 10px 12px; border-left: 2px solid var(--border); }
+  .os-readiness-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 7px; }
+  .os-readiness-body { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); line-height: 1.75; }
+  .os-readiness-body + .os-readiness-body { margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -391,6 +405,14 @@
     <div class="rule-line"><div class="rule-num">02</div><div class="rule-text"><strong>Two rest days</strong> triggers floor rule on day three. Just move.</div></div>
     <div class="rule-line"><div class="rule-num">03</div><div class="rule-text"><strong>Don't raise the bar</strong> after a good week. The floor stays the floor.</div></div>
   </div>
+
+  <!-- PHASE 2 READINESS -->
+  <div class="p2-card">
+    <div class="p2-title">Phase 2 Readiness</div>
+    <div class="p2-scroll"><div id="p2-graph-svg"></div></div>
+    <div class="p2-counter" id="p2-counter">—</div>
+    <div class="p2-banner" id="p2-banner" style="display:none">Phase 2 ready — open your context doc and start a new conversation</div>
+  </div>
 </div>
 
 <!-- ══ STRENGTH ══ -->
@@ -515,6 +537,11 @@
         <div class="os-phase-num">Phase 1</div>
         <div class="os-phase-title">Movement Daily</div>
         <div class="os-phase-desc">One metric: did you move today? Gym / treadmill / floor. Wake-up time doesn't count yet.</div>
+      </div>
+      <div class="os-readiness">
+        <div class="os-readiness-title">Am I ready for Phase 2?</div>
+        <div class="os-readiness-body">Ready when: movement days clearly outnumber rest days most weeks / moving feels like the default not the decision / rest feels like recovery not relief / true for at least 3 weeks in a row.</div>
+        <div class="os-readiness-body">Not ready if: alternating movement and rest most days / still deciding each morning whether to move / good weeks followed by collapse weeks.</div>
       </div>
       <div class="os-phase-row">
         <div class="os-phase-num">Phase 2</div>
@@ -860,6 +887,8 @@ function renderWeekStats() {
   document.getElementById('rest-warn-banner').style.display =
     (twoRests && !todayMoved) ? 'block' : 'none';
 
+  renderPhase2Graph();
+
   // Breakdown
   const bd = document.getElementById('weekBreakdown');
   bd.innerHTML = '';
@@ -1113,6 +1142,72 @@ function connectGitHub() {
   localStorage.setItem('gh_token', t);
   document.getElementById('setup-overlay').classList.remove('visible');
   init();
+}
+
+// ── PHASE 2 READINESS GRAPH ──
+function getWeeks() {
+  const PHASE_START = new Date('2026-05-19T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const weeks = [];
+  let wStart = new Date(PHASE_START);
+  while (wStart <= today) {
+    const wEnd = new Date(wStart); wEnd.setDate(wEnd.getDate() + 6);
+    let moveDays = 0;
+    const d = new Date(wStart);
+    while (d <= wEnd && d <= today) {
+      const dd = getDayData(dateToKey(new Date(d)));
+      if (dd.move === 'gym' || dd.move === 'treadmill' || dd.move === 'floor') moveDays++;
+      d.setDate(d.getDate() + 1);
+    }
+    weeks.push({ num: weeks.length + 1, moveDays, isComplete: wEnd < today });
+    wStart.setDate(wStart.getDate() + 7);
+  }
+  return weeks;
+}
+
+function renderPhase2Graph() {
+  const weeks = getWeeks();
+  if (!weeks.length) return;
+
+  const completed = weeks.filter(w => w.isComplete);
+  let consec = 0;
+  for (let i = completed.length - 1; i >= 0; i--) {
+    if (completed[i].moveDays >= 5) consec++; else break;
+  }
+  const isGreen = consec >= 4;
+  const col = isGreen ? 'var(--opt)' : 'var(--resp)';
+
+  const PL = 22, PR = 14, PT = 22, PB = 22, PH = 60, WS = 44;
+  const SW = PL + Math.max(weeks.length - 1, 0) * WS + PR;
+  const SH = PT + PH + PB;
+  const yx = v => PT + (7 - v) / 7 * PH;
+  const xx = i => PL + i * WS;
+  const TY = yx(5);
+
+  const path = weeks.map((w, i) => `${i===0?'M':'L'}${xx(i).toFixed(1)},${yx(w.moveDays).toFixed(1)}`).join(' ');
+
+  const dots = weeks.map((w, i) => w.isComplete
+    ? `<circle cx="${xx(i)}" cy="${yx(w.moveDays).toFixed(1)}" r="3.5" fill="${col}"/>`
+    : `<circle cx="${xx(i)}" cy="${yx(w.moveDays).toFixed(1)}" r="3.5" fill="var(--bg)" stroke="${col}" stroke-width="1.5" stroke-dasharray="2,2"/>`
+  ).join('');
+
+  const xlabels = weeks.map((w, i) =>
+    `<text x="${xx(i)}" y="${SH-5}" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="var(--text-dim)">W${w.num}</text>`
+  ).join('');
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${SW}" height="${SH}" viewBox="0 0 ${SW} ${SH}">
+    <text x="${PL}" y="${TY-5}" font-family="DM Mono,monospace" font-size="7" fill="var(--text-dim)" letter-spacing="0.06em">PHASE 2 THRESHOLD</text>
+    <line x1="${PL}" y1="${TY}" x2="${PL+(weeks.length-1)*WS}" y2="${TY}" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="${PL-4}" y="${yx(7)+3}" text-anchor="end" font-family="DM Mono,monospace" font-size="8" fill="var(--text-dim)">7</text>
+    <text x="${PL-4}" y="${yx(0)+3}" text-anchor="end" font-family="DM Mono,monospace" font-size="8" fill="var(--text-dim)">0</text>
+    <path d="${path}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}
+    ${xlabels}
+  </svg>`;
+
+  document.getElementById('p2-graph-svg').innerHTML = svg;
+  document.getElementById('p2-counter').textContent = `${Math.min(consec, 4)}/4 consecutive weeks at 5+ days`;
+  document.getElementById('p2-banner').style.display = isGreen ? 'block' : 'none';
 }
 
 // ── INIT ──
