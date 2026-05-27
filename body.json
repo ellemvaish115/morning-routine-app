@@ -6,7 +6,8 @@
     "lastMeal": null
   },
   "2026-05-27": {
-    "bloat": "mild"
+    "bloat": "mild",
+    "firstMeal": "after-1"
   },
   "2026-05-28": {
     "cycleStart": false
