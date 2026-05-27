@@ -1146,7 +1146,7 @@ function connectGitHub() {
 
 // ── PHASE 2 READINESS GRAPH ──
 function getWeeks() {
-  const PHASE_START = new Date('2026-05-19T00:00:00');
+  const PHASE_START = new Date('2026-05-18T00:00:00'); // Mon of the week phase started (19 May is Tue)
   const today = new Date(); today.setHours(0,0,0,0);
   const weeks = [];
   let wStart = new Date(PHASE_START);
