@@ -12,6 +12,7 @@
   },
   "2026-05-28": {
     "cycleStart": false,
-    "bloat": "none"
+    "bloat": "none",
+    "firstMeal": "after-1"
   }
 }
