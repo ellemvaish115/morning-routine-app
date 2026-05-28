@@ -11,6 +11,7 @@
     "lastMeal": "after-9"
   },
   "2026-05-28": {
-    "cycleStart": false
+    "cycleStart": false,
+    "bloat": "none"
   }
 }
