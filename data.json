@@ -67,6 +67,7 @@
   },
   "2026-05-28": {
     "move": "gym",
-    "wakeTime": "10:00"
+    "wakeTime": "10:00",
+    "wakeHow": "lay"
   }
 }
