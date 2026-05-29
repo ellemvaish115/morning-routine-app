@@ -66,6 +66,11 @@
     "wakeHow": "lay"
   },
   "2026-05-28": {
+    "move": "gym",
+    "wakeTime": "10:00",
+    "wakeHow": "lay"
+  },
+  "2026-05-29": {
     "move": "floor",
     "wakeTime": "8:00",
     "wakeHow": "longer",
