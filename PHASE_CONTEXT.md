@@ -37,7 +37,8 @@ Bonus (optional, no pressure): Wabi (clean house on waking), Sunpo (30 min morni
 Movement: single select — Gym / Treadmill / Floor / Rest
 Wake log (neutral, no pass/fail):
 - Woke up at: time chips 5am–12pm in 30 min intervals
-- Then: Up straight away / Negotiated within 10 min / Negotiated took longer / Just lay there
+- Got up at: time chips 5am–12pm in 30 min intervals
+- Then: Got up straight away / Negotiated / Just lay there
 Bonus: Wabi / Sunpo / Ma — optional, logged separately
 
 ## Tracking — Body tab
@@ -84,12 +85,76 @@ NOT stable if alternating movement and rest every day.
 Phase 2 ready indicator in app: 4 consecutive weeks of 5+ movement days. Zero tolerance — any week below 5 resets counter.
 
 ## Phase 2 — not started
-Focus: wake-up anchor
-Trigger: Phase 2 readiness graph turns green in app.
-What we know already: bed sheet folding already happens naturally. 10 minute negotiation window being practised. Wake time data from Phase 1 will show actual pattern.
-Key design principle: not about waking earlier. About having one consistent physical anchor that fires at whatever time you wake — 7am or 10:30am, same trigger.
-Wake data collected in Phase 1 will inform exact design of Phase 2 system.
-Two rest types distinction (intentional vs reactive) becomes relevant here — Phase 1 logs wake time and negotiation pattern which gives this data without needing separate rest categorisation.
+Focus: wake anchor + strength training attendance
+Trigger: 4 consecutive weeks of 5+ movement days in
+app graph. Graph turning green is the signal to open
+a new conversation with this context doc. Not an
+automatic phase change — a prompt to have the
+review conversation.
+
+Phase 2 has two parallel threads:
+
+**Thread 1 — General movement consistency**
+Already built in Phase 1. Phase 2 maintains it.
+
+**Thread 2 — Strength training attendance**
+Tue/Thu/Sat are scheduled. Missing these compounds —
+one miss affects next day mood and motivation.
+Breaking this compounding effect is Phase 2 priority.
+
+**Phase 2 is two mini-phases:**
+
+Phase 2a — Anchor only
+One thing: bed sheet within 10 minutes of waking,
+every day, regardless of wake time.
+No window targets yet. Just close the gap consistently.
+Same philosophy as Phase 1 — fix one thing at a time.
+Duration: until gap is consistently small most days.
+
+Phase 2b — Window shift
+Once gap is stable, shift wake time into a consistent
+window. One target only: gym day wake window.
+Gym days (Tue/Thu/Sat) have a hard constraint — 8am
+start. Everything else references this.
+All other days: same window as default with flex.
+Floor days: no window, anchor fires whenever you wake.
+
+**What Phase 1 data will tell us:**
+- Actual wake time range and average
+- Wake vs get up gap by day of week
+- Which days have longest gaps
+- Whether gaps correlate with gym days (Tue/Thu/Sat)
+- Whether just lay there days follow missed gym days
+- Strength training attendance pattern across weeks
+- Whether misses are wake-related or mood-related
+
+**How to start Phase 2:**
+Upload context doc and say ready for Phase 2.
+Claude should:
+1. Pull patterns from data.json and strength.json
+2. Analyse wake time average and range from Phase 1
+3. Analyse wake vs get up gap by day of week
+4. Analyse gym attendance specifically — how many
+   of 3 scheduled days hit per week, miss pattern
+5. Determine if Phase 2a anchor already stable from
+   Phase 1 practice or needs dedicated time first
+6. Based on data analysis, suggest specific wake
+   window and get up gap targets for gym days.
+   User confirms or adjusts. Claude derives these
+   from: actual average wake time in Phase 1,
+   average gap on gym days, and what time needed
+   to comfortably make 8am gym start
+7. Design intervention based on dominant pattern —
+   not generic advice. If misses are wake-related:
+   anchor fires earlier on gym days. If mood-related:
+   different intervention needed.
+
+**Key principles:**
+Data first, prescription second.
+Fix one thing at a time.
+Same philosophy throughout all phases.
+Tier system exists but gym day window is the only
+hard target. Everything else has flex built in.
 
 ## Phase 3 — not started
 Focus: full routine
