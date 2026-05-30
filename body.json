@@ -22,6 +22,8 @@
     "lastMeal": "after-9"
   },
   "2026-05-30": {
-    "bloat": "none"
+    "bloat": "none",
+    "firstMeal": "11-1",
+    "lastMeal": "after-9"
   }
 }
