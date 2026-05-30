@@ -81,6 +81,7 @@
   "2026-05-30": {
     "move": "floor",
     "wakeTime": "9:00",
-    "wakeHow": "lay"
+    "wakeHow": "lay",
+    "getUpTime": "11:30"
   }
 }
