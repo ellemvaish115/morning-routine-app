@@ -80,6 +80,7 @@
   },
   "2026-05-30": {
     "move": "rest",
-    "wakeTime": "11:00"
+    "wakeTime": "11:00",
+    "wakeHow": "lay"
   }
 }
