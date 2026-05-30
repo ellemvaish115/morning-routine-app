@@ -20,5 +20,8 @@
     "bloat": "bloated",
     "firstMeal": "9-11",
     "lastMeal": "after-9"
+  },
+  "2026-05-30": {
+    "bloat": "none"
   }
 }
