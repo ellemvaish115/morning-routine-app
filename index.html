@@ -336,11 +336,12 @@
     <div class="wake-section-label">Morning wake</div>
     <div class="wake-row-label">Woke up at</div>
     <div class="wake-time-row" id="wake-time-row"></div>
+    <div class="wake-row-label" style="margin-top:12px;">Got up at</div>
+    <div class="wake-time-row" id="getup-time-row"></div>
     <div class="wake-row-label" style="margin-top:12px;">Then</div>
     <div class="wake-how-col">
-      <div class="n-chip wake-how-chip" data-val="straight" onclick="selectWakeHow('straight')">Up straight away</div>
-      <div class="n-chip wake-how-chip" data-val="neg10" onclick="selectWakeHow('neg10')">Negotiated — within 10 min</div>
-      <div class="n-chip wake-how-chip" data-val="longer" onclick="selectWakeHow('longer')">Negotiated — took longer</div>
+      <div class="n-chip wake-how-chip" data-val="straight" onclick="selectWakeHow('straight')">Got up straight away</div>
+      <div class="n-chip wake-how-chip" data-val="neg" onclick="selectWakeHow('neg')">Negotiated</div>
       <div class="n-chip wake-how-chip" data-val="lay" onclick="selectWakeHow('lay')">Just lay there</div>
     </div>
   </div>
@@ -743,21 +744,25 @@ function toggleBonus(b) {
 
 // ── WAKE LOG ──
 function buildWakeTimeChips() {
-  const row = document.getElementById('wake-time-row');
   const times = [];
   for (let h = 5; h <= 12; h++) {
     times.push(`${h}:00`);
     if (h < 12) times.push(`${h}:30`);
   }
-  row.innerHTML = times.map(t =>
-    `<div class="n-chip wake-time-chip" data-val="${t}" onclick="selectWakeTime('${t}')">${t}</div>`
+  const chipsHtml = (cls, fn) => times.map(t =>
+    `<div class="n-chip ${cls}" data-val="${t}" onclick="${fn}('${t}')">${t}</div>`
   ).join('');
+  document.getElementById('wake-time-row').innerHTML  = chipsHtml('wake-time-chip', 'selectWakeTime');
+  document.getElementById('getup-time-row').innerHTML = chipsHtml('getup-time-chip', 'selectGetUpTime');
 }
 
 function renderWakeLog() {
   const d = getDayData(currentDay);
   document.querySelectorAll('.wake-time-chip').forEach(c => {
     c.classList.toggle('selected', c.dataset.val === d.wakeTime);
+  });
+  document.querySelectorAll('.getup-time-chip').forEach(c => {
+    c.classList.toggle('selected', c.dataset.val === d.getUpTime);
   });
   document.querySelectorAll('.wake-how-chip').forEach(c => {
     c.classList.toggle('selected', c.dataset.val === d.wakeHow);
@@ -767,6 +772,13 @@ function renderWakeLog() {
 function selectWakeTime(val) {
   if (!data[currentDay]) data[currentDay] = {};
   data[currentDay].wakeTime = (data[currentDay].wakeTime === val) ? null : val;
+  renderWakeLog();
+  saveData();
+}
+
+function selectGetUpTime(val) {
+  if (!data[currentDay]) data[currentDay] = {};
+  data[currentDay].getUpTime = (data[currentDay].getUpTime === val) ? null : val;
   renderWakeLog();
   saveData();
 }
