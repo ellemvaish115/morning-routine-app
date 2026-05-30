@@ -73,7 +73,7 @@
   "2026-05-29": {
     "move": "floor",
     "wakeTime": "8:00",
-    "wakeHow": "longer",
+    "wakeHow": "neg",
     "wabi": false,
     "sunpo": false,
     "ma": false
