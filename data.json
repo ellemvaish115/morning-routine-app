@@ -88,6 +88,6 @@
     "wakeTime": "7:00",
     "getUpTime": "8:00",
     "wakeHow": "neg",
-    "move": "rest"
+    "move": null
   }
 }
