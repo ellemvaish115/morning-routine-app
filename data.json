@@ -85,6 +85,7 @@
     "getUpTime": "11:30"
   },
   "2026-05-31": {
-    "wakeTime": "7:00"
+    "wakeTime": "7:00",
+    "getUpTime": "8:00"
   }
 }
