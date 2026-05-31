@@ -83,5 +83,8 @@
     "wakeTime": "9:00",
     "wakeHow": "lay",
     "getUpTime": "11:30"
+  },
+  "2026-05-31": {
+    "wakeTime": "7:00"
   }
 }
