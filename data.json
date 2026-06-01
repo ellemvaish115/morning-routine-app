@@ -91,6 +91,7 @@
     "move": null
   },
   "2026-06-01": {
-    "move": "floor"
+    "move": "floor",
+    "wakeTime": "7:00"
   }
 }
