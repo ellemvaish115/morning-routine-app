@@ -1,6 +1,12 @@
 {
   "deadlift": [],
   "squat": [],
-  "pushup": [],
+  "pushup": [
+    {
+      "id": "1780286929329",
+      "date": "06-01",
+      "val": "6 assisted"
+    }
+  ],
   "pullup": []
 }
