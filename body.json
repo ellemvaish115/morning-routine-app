@@ -32,6 +32,7 @@
     "lastMeal": "7-9"
   },
   "2026-06-01": {
-    "bloat_tummy": "none"
+    "bloat_tummy": "none",
+    "bloat_face": "bloated"
   }
 }
