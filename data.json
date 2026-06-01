@@ -95,6 +95,7 @@
     "wakeTime": "7:00",
     "getUpTime": "8:30",
     "wakeHow": "neg",
-    "sunpo": true
+    "sunpo": true,
+    "ma": true
   }
 }
