@@ -43,12 +43,16 @@ Bonus: Wabi / Sunpo / Ma — optional, logged separately
 
 ## Tracking — Body tab
 Logged post-gym using Yesterday toggle (so logged morning after)
-- Bloat tracked as two separate signals daily:
-  - Tummy: None / Mild / Bloated — typically gut, food, cycle related
-  - Face: None / Mild / Bloated — typically hormonal, sleep, sodium related
-  Face and tummy bloat tracked separately to identify different pattern causes. After 2–3 cycles cross-reference face bloat with ovulation window and tummy bloat with period dates.
+Bloat tracked as two separate signals, toggle UI — one chip row switches between tummy and face:
+- Tummy: None / Mild / Bloated — gut, food, cycle related
+- Face: None / Mild / Bloated — hormonal, sleep, sodium related
+Sleep and food in one grouped card:
+- Sleep time: chips 8pm–3am in 30 min intervals
+- First meal / Last meal: toggle UI, one chip row switches between them
+- First meal: Before 9am / 9–11am / 11am–1pm / After 1pm or skipped
+- Last meal: Before 7pm / 7–9pm / After 9pm
+Sleep time correlates with face bloat next day. Track together to find pattern.
 - Cycle: log period start date only, app shows days since
-- Food rhythm: First meal (before 9am / 9–11am / 11am–1pm / after 1pm or skipped) / Last meal (before 7pm / 7–9pm / after 9pm)
 All saves to body.json keyed by date.
 
 ## Tracking — Week tab
@@ -62,9 +66,15 @@ All saves to body.json keyed by date.
 Four lifts tracked per session when relevant:
 - Deadlift: baseline 45kg → year-end 80kg (interim 60kg)
 - Squat: baseline 20kg → year-end 60kg (interim 40kg)
-- Push-up: baseline assisted/8 → year-end 15 full form (interim 8 full form)
-- Pull-up: baseline 0 → year-end 1 unassisted (no interim, this is the goal)
-Free text input per lift. Progress bar baseline to goal with interim marker. PR tagged automatically.
+Push-up progression (single card, two stages):
+Stage 1 Assisted: current PR 6 reps, milestone 15 assisted → attempt full form
+Stage 2 Full form: current 0, year-end goal 15 full form
+Stage 2 unlocks after 15 assisted logged
+Pull-up progression (single card, three stages):
+Stage 1a Dead hang: current 20s, milestone 60s
+Stage 1b Negatives: current 0, milestone 5 clean reps. Unlocks after 60s dead hang logged
+Stage 2 Unassisted: current 0, year-end goal 1. Unlocks after 5 negatives logged
+Free text input per stage. Progress bar baseline to goal. PR tagged automatically.
 
 ## Bounce-back protocol
 01: One rest day — not a failure. Log it, move on.
@@ -86,7 +96,7 @@ Started: 19 May 2026
 Success condition: movement days clearly outnumber rest days most weeks. Moving feels like the default not the decision. Rest feels like recovery not relief. True for at least 3 weeks in a row.
 NOT stable if alternating movement and rest every day.
 Phase 2 ready indicator in app: 4 consecutive weeks of 5+ movement days. Zero tolerance — any week below 5 resets counter.
-App stable version date: 1 June 2026. All tracking fields finalised from this date. Movement data exists from 19 May 2026 and is valid for Phase 2 readiness graph. Wake log, body tracking, and bloat fields (tummy/face) are complete from 1 June 2026 — patterns before this date are partial. For data analysis at Phase 2 start: use full dataset from 1 June onwards for wake and body patterns. May movement data is valid and included in Phase 2 readiness graph calculation.
+App stable version date: 1 June 2026. All tracking fields finalised from this date. UI redesigned for reduced visual overwhelm — grouped cards, toggle headers, compact wake log. Movement data exists from 19 May 2026 and is valid for Phase 2 readiness graph. Wake log, body tracking, bloat (tummy/face), sleep time all complete from 1 June 2026.
 
 ## Phase 2 — not started
 Focus: wake anchor + strength training attendance
