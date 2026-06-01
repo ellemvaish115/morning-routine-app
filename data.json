@@ -94,6 +94,7 @@
     "move": "floor",
     "wakeTime": "7:00",
     "getUpTime": "8:30",
-    "wakeHow": "neg"
+    "wakeHow": "neg",
+    "sunpo": true
   }
 }
