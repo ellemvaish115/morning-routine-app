@@ -30,5 +30,8 @@
     "bloat": "bloated",
     "firstMeal": "9-11",
     "lastMeal": "7-9"
+  },
+  "2026-06-01": {
+    "bloat_tummy": "none"
   }
 }
