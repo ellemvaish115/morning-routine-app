@@ -249,6 +249,38 @@
   .os-readiness-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 7px; }
   .os-readiness-body { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); line-height: 1.75; }
   .os-readiness-body + .os-readiness-body { margin-top: 6px; }
+
+  /* TAB CARDS */
+  .tab-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin: 10px 24px 0; }
+  .tab-card.amber-border { border-color: rgba(232,165,75,0.3); }
+  .tab-card.green-border { border-color: rgba(126,200,160,0.25); }
+  .tab-card-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+
+  /* CARD TOGGLE HEADER */
+  .card-toggle { display: flex; background: var(--surface2); border-radius: 6px; padding: 2px; gap: 2px; margin-bottom: 10px; }
+  .cth-opt { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); padding: 7px 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .cth-opt.active { background: var(--surface); color: var(--text); }
+
+  /* SEGMENTED CONTROL */
+  .seg-row { display: flex; background: var(--surface2); border-radius: 6px; padding: 2px; gap: 2px; }
+  .seg-opt { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.04em; color: var(--text-muted); padding: 8px 3px; border-radius: 4px; cursor: pointer; transition: all 0.2s; user-select: none; -webkit-tap-highlight-color: transparent; line-height: 1.35; }
+  .seg-opt.selected { background: var(--surface); color: var(--text); }
+
+  /* FLOOR RULE */
+  .floor-rule { font-size: 11px; color: var(--text-dim); font-style: italic; margin-top: 10px; line-height: 1.5; }
+
+  /* STAGE BLOCK (strength multi-stage) */
+  .stage-block { padding: 12px 0 0; }
+  .stage-block + .stage-block { border-top: 1px solid var(--border); margin-top: 4px; }
+  .stage-head { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  .stage-sublabel { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-style: italic; }
+  .stage-block.locked { opacity: 0.35; pointer-events: none; }
+
+  /* override wake-time-row margins inside a tab-card */
+  .tab-card .wake-time-row { margin: 0 -16px; padding: 2px 16px 4px; }
+
+  /* WAKE LABEL (reusable row label inside cards) */
+  .wake-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -282,19 +314,10 @@
 
 <!-- ══ TODAY ══ -->
 <div class="tab-content active" id="tab-today">
-  <div class="phase-bar">
-    <div class="phase-dot"></div>
-    <div>
-      <div class="phase-label">Phase 1 — Movement Daily</div>
-      <div class="phase-desc">One question: did you move today?</div>
-    </div>
-  </div>
 
-  <div class="section">
-    <div class="section-header">
-      <span class="section-tag resp">Responsibility</span>
-      <span class="section-rule">pick one · this is the floor</span>
-    </div>
+  <!-- Card 1: Move -->
+  <div class="tab-card amber-border" style="margin-top:16px;">
+    <div class="tab-card-title">Move</div>
     <div class="move-grid">
       <div class="move-pill" id="pill-gym" onclick="selectMove('gym')">
         <div class="pill-icon">🏋️</div>
@@ -325,41 +348,40 @@
         </div>
       </div>
     </div>
+    <div class="floor-rule">Worst day: go to first floor and move. That counts.</div>
   </div>
 
-  <div class="floor-note">
-    <div class="floor-text"><strong>Floor rule:</strong> Sick, low, any day — go to the first floor and move for even 1 minute. That counts. Log Floor.</div>
-  </div>
-
-  <!-- WAKE LOG -->
-  <div class="wake-section">
-    <div class="wake-section-label">Morning wake</div>
-    <div class="wake-row-label">Woke up at</div>
-    <div class="wake-time-row" id="wake-time-row"></div>
-    <div class="wake-row-label" style="margin-top:12px;">Got up at</div>
-    <div class="wake-time-row" id="getup-time-row"></div>
-    <div class="wake-row-label" style="margin-top:12px;">Then</div>
-    <div class="wake-how-col">
-      <div class="n-chip wake-how-chip" data-val="straight" onclick="selectWakeHow('straight')">Got up straight away</div>
-      <div class="n-chip wake-how-chip" data-val="neg" onclick="selectWakeHow('neg')">Negotiated</div>
-      <div class="n-chip wake-how-chip" data-val="lay" onclick="selectWakeHow('lay')">Just lay there</div>
+  <!-- Card 2: Morning -->
+  <div class="tab-card">
+    <div class="tab-card-title">Morning</div>
+    <div class="wake-label">Woke up</div>
+    <div class="wake-time-row" id="wake-time-row" style="margin-top:7px;"></div>
+    <div class="wake-label" style="margin-top:12px;">Got up</div>
+    <div class="wake-time-row" id="getup-time-row" style="margin-top:7px;"></div>
+    <div class="wake-label" style="margin-top:12px;">Then</div>
+    <div class="seg-row" style="margin-top:7px;">
+      <div class="seg-opt wake-how-chip" data-val="straight" onclick="selectWakeHow('straight')">Got up straight away</div>
+      <div class="seg-opt wake-how-chip" data-val="neg" onclick="selectWakeHow('neg')">Negotiated</div>
+      <div class="seg-opt wake-how-chip" data-val="lay" onclick="selectWakeHow('lay')">Just lay there</div>
     </div>
   </div>
 
-  <div class="divider"></div>
-
-  <div class="bonus-row">
-    <div class="bonus-chip" id="bonus-wabi" onclick="toggleBonus('wabi')">
-      <div class="bonus-icon">🧹</div>
-      <div class="bonus-name">Wabi</div>
-    </div>
-    <div class="bonus-chip" id="bonus-sunpo" onclick="toggleBonus('sunpo')">
-      <div class="bonus-icon">☀️</div>
-      <div class="bonus-name">Sunpo</div>
-    </div>
-    <div class="bonus-chip" id="bonus-ma" onclick="toggleBonus('ma')">
-      <div class="bonus-icon">🍃</div>
-      <div class="bonus-name">Ma</div>
+  <!-- Card 3: Bonus -->
+  <div class="tab-card green-border" style="margin-bottom:8px;">
+    <div class="tab-card-title">Bonus</div>
+    <div class="bonus-row" style="padding:0;">
+      <div class="bonus-chip" id="bonus-wabi" onclick="toggleBonus('wabi')">
+        <div class="bonus-icon">🧹</div>
+        <div class="bonus-name">Wabi</div>
+      </div>
+      <div class="bonus-chip" id="bonus-sunpo" onclick="toggleBonus('sunpo')">
+        <div class="bonus-icon">☀️</div>
+        <div class="bonus-name">Sunpo</div>
+      </div>
+      <div class="bonus-chip" id="bonus-ma" onclick="toggleBonus('ma')">
+        <div class="bonus-icon">🍃</div>
+        <div class="bonus-name">Ma</div>
+      </div>
     </div>
   </div>
 
@@ -451,26 +473,62 @@
   <div class="lift-card">
     <div class="lift-header">
       <div class="lift-name">Push-up</div>
-      <div class="lift-goal-badge">Year-end: 15 full form<br>Interim: 8 full form</div>
     </div>
-    <div class="lift-progress" id="prog-pushup"></div>
-    <div class="lift-log" id="log-pushup"></div>
-    <div class="lift-form">
-      <input class="lift-input" id="input-pushup" placeholder="e.g. 8 assisted / 5 full" type="text" />
-      <div class="lift-btn" onclick="logLift('pushup')">Log</div>
+    <div class="stage-block">
+      <div class="stage-head">Stage 1 · Assisted</div>
+      <div class="stage-sublabel">Assisted reps — reach 15 to attempt full form</div>
+      <div class="lift-progress" id="prog-pushup_assisted"></div>
+      <div class="lift-log" id="log-pushup_assisted"></div>
+      <div class="lift-form">
+        <input class="lift-input" id="input-pushup_assisted" placeholder="e.g. 10 assisted" type="text" />
+        <div class="lift-btn" onclick="logLift('pushup_assisted')">Log</div>
+      </div>
+    </div>
+    <div class="stage-block" id="pushup-s2">
+      <div class="stage-head">Stage 2 · Full form</div>
+      <div class="stage-sublabel">Full form reps</div>
+      <div class="lift-progress" id="prog-pushup_full"></div>
+      <div class="lift-log" id="log-pushup_full"></div>
+      <div class="lift-form">
+        <input class="lift-input" id="input-pushup_full" placeholder="e.g. 3 full form" type="text" />
+        <div class="lift-btn" onclick="logLift('pushup_full')">Log</div>
+      </div>
     </div>
   </div>
 
   <div class="lift-card" style="margin-bottom:0">
     <div class="lift-header">
       <div class="lift-name">Pull-up</div>
-      <div class="lift-goal-badge">Year-end: 1 unassisted<br>then build</div>
     </div>
-    <div class="lift-progress" id="prog-pullup"></div>
-    <div class="lift-log" id="log-pullup"></div>
-    <div class="lift-form">
-      <input class="lift-input" id="input-pullup" placeholder="e.g. 0 / band assisted / 1" type="text" />
-      <div class="lift-btn" onclick="logLift('pullup')">Log</div>
+    <div class="stage-block">
+      <div class="stage-head">Stage 1a · Dead hang</div>
+      <div class="stage-sublabel">Dead hang seconds — reach 60s as foundation</div>
+      <div class="lift-progress" id="prog-pullup_deadhang"></div>
+      <div class="lift-log" id="log-pullup_deadhang"></div>
+      <div class="lift-form">
+        <input class="lift-input" id="input-pullup_deadhang" placeholder="e.g. 25s" type="text" />
+        <div class="lift-btn" onclick="logLift('pullup_deadhang')">Log</div>
+      </div>
+    </div>
+    <div class="stage-block" id="pullup-s1b">
+      <div class="stage-head">Stage 1b · Negatives</div>
+      <div class="stage-sublabel">Negative reps — reach 5 clean reps</div>
+      <div class="lift-progress" id="prog-pullup_negatives"></div>
+      <div class="lift-log" id="log-pullup_negatives"></div>
+      <div class="lift-form">
+        <input class="lift-input" id="input-pullup_negatives" placeholder="e.g. 2 negatives" type="text" />
+        <div class="lift-btn" onclick="logLift('pullup_negatives')">Log</div>
+      </div>
+    </div>
+    <div class="stage-block" id="pullup-s2">
+      <div class="stage-head">Stage 2 · Unassisted</div>
+      <div class="stage-sublabel">Unassisted pull-up</div>
+      <div class="lift-progress" id="prog-pullup_unassisted"></div>
+      <div class="lift-log" id="log-pullup_unassisted"></div>
+      <div class="lift-form">
+        <input class="lift-input" id="input-pullup_unassisted" placeholder="e.g. 1" type="text" />
+        <div class="lift-btn" onclick="logLift('pullup_unassisted')">Log</div>
+      </div>
     </div>
   </div>
 </div>
@@ -479,50 +537,38 @@
 <div class="tab-content" id="tab-body">
 
   <div class="body-date-toggle">
-    <div class="bdt-opt active" id="bdt-today" onclick="selectBodyDate('today')">Today</div>
-    <div class="bdt-opt" id="bdt-yesterday" onclick="selectBodyDate('yesterday')">Yesterday</div>
+    <div class="bdt-opt active" id="bdt-today"     onclick="selectBodyDate('today')">Today</div>
+    <div class="bdt-opt"        id="bdt-yesterday" onclick="selectBodyDate('yesterday')">Yesterday</div>
   </div>
 
-  <!-- Bloat -->
-  <div class="body-section">
-    <div class="body-section-title">Bloat</div>
-    <div class="body-sub-label">Tummy</div>
-    <div class="n-chip-row">
-      <div class="n-chip" id="bt-none"    onclick="selectBloatTummy('none')">None</div>
-      <div class="n-chip" id="bt-mild"    onclick="selectBloatTummy('mild')">Mild</div>
-      <div class="n-chip" id="bt-bloated" onclick="selectBloatTummy('bloated')">Bloated</div>
+  <!-- Card 1: Bloat -->
+  <div class="tab-card">
+    <div class="card-toggle">
+      <div class="cth-opt active" id="bloat-tab-tummy" onclick="selectBloatTab('tummy')">Tummy</div>
+      <div class="cth-opt"        id="bloat-tab-face"  onclick="selectBloatTab('face')">Face</div>
     </div>
-    <div class="body-sub-label" style="margin-top:14px;">Face</div>
     <div class="n-chip-row">
-      <div class="n-chip" id="bf-none"    onclick="selectBloatFace('none')">None</div>
-      <div class="n-chip" id="bf-mild"    onclick="selectBloatFace('mild')">Mild</div>
-      <div class="n-chip" id="bf-bloated" onclick="selectBloatFace('bloated')">Bloated</div>
+      <div class="n-chip" id="bloat-none"    onclick="selectActiveBloat('none')">None</div>
+      <div class="n-chip" id="bloat-mild"    onclick="selectActiveBloat('mild')">Mild</div>
+      <div class="n-chip" id="bloat-bloated" onclick="selectActiveBloat('bloated')">Bloated</div>
     </div>
   </div>
 
-  <!-- Cycle -->
-  <div class="body-section">
-    <div class="body-section-title">Cycle</div>
+  <!-- Card 2: Sleep & Food -->
+  <div class="tab-card">
+    <div class="wake-label" style="margin-bottom:7px;">Slept at</div>
+    <div class="wake-time-row" id="sleep-time-row"></div>
+    <div class="card-toggle" style="margin-top:14px;">
+      <div class="cth-opt active" id="meal-tab-first" onclick="selectMealTab('first')">First meal</div>
+      <div class="cth-opt"        id="meal-tab-last"  onclick="selectMealTab('last')">Last meal</div>
+    </div>
+    <div class="n-chip-row" id="meal-chips"></div>
+  </div>
+
+  <!-- Card 3: Cycle -->
+  <div class="tab-card" style="margin-bottom:16px;">
     <div class="cycle-btn" onclick="logCycle()">Log period start today</div>
     <div class="cycle-info" id="cycle-info">No period start logged yet</div>
-  </div>
-
-  <!-- Food rhythm -->
-  <div class="body-section">
-    <div class="body-section-title">Food rhythm</div>
-    <div class="body-sub-label">First meal</div>
-    <div class="n-chip-row">
-      <div class="n-chip" id="fm-before-9" onclick="selectFirstMeal('before-9')">Before 9am</div>
-      <div class="n-chip" id="fm-9-11"     onclick="selectFirstMeal('9-11')">9–11am</div>
-      <div class="n-chip" id="fm-11-1"     onclick="selectFirstMeal('11-1')">11am–1pm</div>
-      <div class="n-chip" id="fm-after-1"  onclick="selectFirstMeal('after-1')">After 1pm or skipped</div>
-    </div>
-    <div class="body-sub-label" style="margin-top:14px;">Last meal</div>
-    <div class="n-chip-row">
-      <div class="n-chip" id="lm-before-7" onclick="selectLastMeal('before-7')">Before 7pm</div>
-      <div class="n-chip" id="lm-7-9"      onclick="selectLastMeal('7-9')">7–9pm</div>
-      <div class="n-chip" id="lm-after-9"  onclick="selectLastMeal('after-9')">After 9pm</div>
-    </div>
   </div>
 
 </div>
@@ -638,12 +684,19 @@ const MOVE_OPTS  = ['gym','treadmill','floor','rest'];
 const BONUS_OPTS = ['wabi','sunpo','ma'];
 
 const LIFT_CONFIG = {
-  deadlift: { goalVal: 80, interimVal: 60, unit: 'kg'   },
-  squat:    { goalVal: 60, interimVal: 40, unit: 'kg'   },
-  pushup:   { goalVal: 15, interimVal: 8,  unit: 'reps' },
-  pullup:   { goalVal: 1,  interimVal: null, unit: 'reps' },
+  deadlift:          { goalVal: 80, interimVal: 60,   unit: 'kg'   },
+  squat:             { goalVal: 60, interimVal: 40,   unit: 'kg'   },
+  pushup_assisted:   { goalVal: 15, interimVal: null, unit: 'reps' },
+  pushup_full:       { goalVal: 15, interimVal: null, unit: 'reps' },
+  pullup_deadhang:   { goalVal: 60, interimVal: null, unit: 'secs' },
+  pullup_negatives:  { goalVal: 5,  interimVal: null, unit: 'reps' },
+  pullup_unassisted: { goalVal: 1,  interimVal: null, unit: 'reps' },
 };
-const LIFT_BASELINE = { deadlift: 45, squat: 20, pushup: 0, pullup: 0 };
+const LIFT_BASELINE = {
+  deadlift: 45, squat: 20,
+  pushup_assisted: 6, pushup_full: 0,
+  pullup_deadhang: 20, pullup_negatives: 0, pullup_unassisted: 0
+};
 
 let data     = {};
 let sdata    = { deadlift: [], squat: [], pushup: [], pullup: [] };
@@ -655,6 +708,9 @@ let bodySha     = null;
 let dataTimer = null, dataChain = Promise.resolve();
 let strTimer  = null, strChain  = Promise.resolve();
 let bodyTimer = null, bodyChain = Promise.resolve();
+
+let bloatActiveTab = 'tummy';
+let mealActiveTab  = 'first';
 
 function saveData() {
   if (!getToken()) { showSetup(); return; }
@@ -706,7 +762,7 @@ function getDayData(key) {
 }
 
 function getBodyData(key) {
-  return bdata[key] || { bloat: null, bloat_tummy: null, bloat_face: null, cycleStart: false, firstMeal: null, lastMeal: null };
+  return bdata[key] || { bloat: null, bloat_tummy: null, bloat_face: null, sleep_time: null, cycleStart: false, firstMeal: null, lastMeal: null };
 }
 
 // ── TODAY ──
@@ -761,6 +817,13 @@ function buildWakeTimeChips() {
   ).join('');
   document.getElementById('wake-time-row').innerHTML  = chipsHtml('wake-time-chip', 'selectWakeTime');
   document.getElementById('getup-time-row').innerHTML = chipsHtml('getup-time-chip', 'selectGetUpTime');
+
+  const sleepTimes = [];
+  for (let h = 20; h <= 23; h++) { sleepTimes.push(`${h}:00`, `${h}:30`); }
+  sleepTimes.push('0:00', '0:30', '1:00', '1:30', '2:00', '2:30', '3:00');
+  document.getElementById('sleep-time-row').innerHTML = sleepTimes.map(t =>
+    `<div class="n-chip sleep-time-chip" data-val="${t}" onclick="selectSleepTime('${t}')">${t}</div>`
+  ).join('');
 }
 
 function renderWakeLog() {
@@ -978,10 +1041,33 @@ function renderWeekStats() {
 
 // ── STRENGTH ──
 function renderStrength() {
-  ['deadlift','squat','pushup','pullup'].forEach(lift => {
+  ['deadlift','squat'].forEach(lift => {
     renderLiftProgress(lift);
     renderLiftLog(lift);
   });
+  renderPushupCard();
+  renderPullupCard();
+}
+
+function renderPushupCard() {
+  ['pushup_assisted','pushup_full'].forEach(k => {
+    renderLiftProgress(k);
+    renderLiftLog(k);
+  });
+  const entries = sdata.pushup_assisted || [];
+  const best = Math.max(0, ...entries.map(e => parseFloat((e.val.match(/(\d+(\.\d+)?)/)||['0'])[1])));
+  document.getElementById('pushup-s2').classList.toggle('locked', best < 15);
+}
+
+function renderPullupCard() {
+  ['pullup_deadhang','pullup_negatives','pullup_unassisted'].forEach(k => {
+    renderLiftProgress(k);
+    renderLiftLog(k);
+  });
+  const dhBest  = Math.max(0, ...(sdata.pullup_deadhang  ||[]).map(e => parseFloat((e.val.match(/(\d+(\.\d+)?)/)||['0'])[1])));
+  const negBest = Math.max(0, ...(sdata.pullup_negatives ||[]).map(e => parseFloat((e.val.match(/(\d+(\.\d+)?)/)||['0'])[1])));
+  document.getElementById('pullup-s1b').classList.toggle('locked', dhBest  < 60);
+  document.getElementById('pullup-s2').classList.toggle('locked',  negBest < 5);
 }
 
 function renderLiftProgress(lift) {
@@ -1074,52 +1160,96 @@ function selectBodyDate(which) {
 function renderBody() {
   const bd = getBodyData(bodyDateKey);
 
-  // Bloat — tummy
+  // Bloat toggle
+  document.getElementById('bloat-tab-tummy').classList.toggle('active', bloatActiveTab === 'tummy');
+  document.getElementById('bloat-tab-face').classList.toggle('active',  bloatActiveTab === 'face');
+  const activeBloat = bloatActiveTab === 'tummy' ? bd.bloat_tummy : bd.bloat_face;
   ['none','mild','bloated'].forEach(v => {
-    document.getElementById('bt-'+v).classList.toggle('selected', bd.bloat_tummy === v);
-  });
-  // Bloat — face
-  ['none','mild','bloated'].forEach(v => {
-    document.getElementById('bf-'+v).classList.toggle('selected', bd.bloat_face === v);
+    document.getElementById('bloat-'+v).classList.toggle('selected', activeBloat === v);
   });
 
-  // Cycle — always shows last logged across all entries, always logs to today
+  // Sleep time
+  document.querySelectorAll('.sleep-time-chip').forEach(c => {
+    c.classList.toggle('selected', c.dataset.val === bd.sleep_time);
+  });
+
+  // Meal toggle
+  document.getElementById('meal-tab-first').classList.toggle('active', mealActiveTab === 'first');
+  document.getElementById('meal-tab-last').classList.toggle('active',  mealActiveTab === 'last');
+  buildMealChips(bd);
+
+  // Cycle
   const lastCycle = Object.keys(bdata).filter(k => bdata[k].cycleStart).sort().pop();
   const cycleInfo = document.getElementById('cycle-info');
   if (lastCycle) {
-    const msPerDay = 86400000;
-    const days = Math.round((new Date(todayKey()) - new Date(lastCycle)) / msPerDay);
-    const label = days === 0 ? 'today' : days === 1 ? '1 day ago' : `${days} days ago`;
-    cycleInfo.textContent = `Last: ${lastCycle} · ${label}`;
+    const days = Math.round((new Date(todayKey()) - new Date(lastCycle)) / 86400000);
+    cycleInfo.textContent = `Last: ${lastCycle} · ${days === 0 ? 'today' : days === 1 ? '1 day ago' : days+' days ago'}`;
   } else {
     cycleInfo.textContent = 'No period start logged yet';
   }
-
-  // First meal
-  ['before-9','9-11','11-1','after-1'].forEach(v => {
-    document.getElementById('fm-'+v).classList.toggle('selected', bd.firstMeal === v);
-  });
-
-  // Last meal
-  ['before-7','7-9','after-9'].forEach(v => {
-    document.getElementById('lm-'+v).classList.toggle('selected', bd.lastMeal === v);
-  });
 }
 
-function selectBloatTummy(val) {
-  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
-  bdata[bodyDateKey].bloat_tummy = (bdata[bodyDateKey].bloat_tummy === val) ? null : val;
-  renderBody();
-  saveBody();
-  showToast('Tummy: '+val.charAt(0).toUpperCase()+val.slice(1));
+function buildMealChips(bd) {
+  bd = bd || getBodyData(bodyDateKey);
+  const el = document.getElementById('meal-chips');
+  if (mealActiveTab === 'first') {
+    const opts = [
+      { val: 'before-9', label: 'Before 9am' },
+      { val: '9-11',     label: '9–11am' },
+      { val: '11-1',     label: '11am–1pm' },
+      { val: 'after-1',  label: 'After 1pm or skipped' },
+    ];
+    el.innerHTML = opts.map(o =>
+      `<div class="n-chip meal-chip${bd.firstMeal === o.val ? ' selected' : ''}" data-val="${o.val}" onclick="selectActiveMeal('${o.val}')">${o.label}</div>`
+    ).join('');
+  } else {
+    const opts = [
+      { val: 'before-7', label: 'Before 7pm' },
+      { val: '7-9',      label: '7–9pm' },
+      { val: 'after-9',  label: 'After 9pm' },
+    ];
+    el.innerHTML = opts.map(o =>
+      `<div class="n-chip meal-chip${bd.lastMeal === o.val ? ' selected' : ''}" data-val="${o.val}" onclick="selectActiveMeal('${o.val}')">${o.label}</div>`
+    ).join('');
+  }
 }
 
-function selectBloatFace(val) {
+function selectBloatTab(tab) {
+  bloatActiveTab = tab;
+  renderBody();
+}
+
+function selectActiveBloat(val) {
   if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
-  bdata[bodyDateKey].bloat_face = (bdata[bodyDateKey].bloat_face === val) ? null : val;
+  const key = bloatActiveTab === 'tummy' ? 'bloat_tummy' : 'bloat_face';
+  bdata[bodyDateKey][key] = (bdata[bodyDateKey][key] === val) ? null : val;
   renderBody();
   saveBody();
-  showToast('Face: '+val.charAt(0).toUpperCase()+val.slice(1));
+  const label = bloatActiveTab === 'tummy' ? 'Tummy' : 'Face';
+  showToast(label+': '+val.charAt(0).toUpperCase()+val.slice(1));
+}
+
+function selectSleepTime(val) {
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  bdata[bodyDateKey].sleep_time = (bdata[bodyDateKey].sleep_time === val) ? null : val;
+  renderBody();
+  saveBody();
+}
+
+function selectMealTab(tab) {
+  mealActiveTab = tab;
+  renderBody();
+}
+
+function selectActiveMeal(val) {
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  if (mealActiveTab === 'first') {
+    bdata[bodyDateKey].firstMeal = (bdata[bodyDateKey].firstMeal === val) ? null : val;
+  } else {
+    bdata[bodyDateKey].lastMeal = (bdata[bodyDateKey].lastMeal === val) ? null : val;
+  }
+  renderBody();
+  saveBody();
 }
 
 function logCycle() {
@@ -1129,20 +1259,6 @@ function logCycle() {
   renderBody();
   saveBody();
   showToast('Period start logged');
-}
-
-function selectFirstMeal(val) {
-  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
-  bdata[bodyDateKey].firstMeal = (bdata[bodyDateKey].firstMeal === val) ? null : val;
-  renderBody();
-  saveBody();
-}
-
-function selectLastMeal(val) {
-  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
-  bdata[bodyDateKey].lastMeal = (bdata[bodyDateKey].lastMeal === val) ? null : val;
-  renderBody();
-  saveBody();
 }
 
 // ── TABS ──
@@ -1258,7 +1374,7 @@ async function init() {
   if (dr) { dataSha = dr.sha; if (dr.content) data = dr.content; }
   if (sr) { strengthSha = sr.sha; if (sr.content) sdata = sr.content; }
   if (br) { bodySha = br.sha; if (br.content) bdata = br.content; }
-  ['deadlift','squat','pushup','pullup'].forEach(l => { if (!sdata[l]) sdata[l] = []; });
+  ['deadlift','squat','pushup','pullup','pushup_assisted','pushup_full','pullup_deadhang','pullup_negatives','pullup_unassisted'].forEach(l => { if (!sdata[l]) sdata[l] = []; });
 
   setHeaderDate();
   renderToday();
