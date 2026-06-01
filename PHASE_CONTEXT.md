@@ -43,7 +43,10 @@ Bonus: Wabi / Sunpo / Ma — optional, logged separately
 
 ## Tracking — Body tab
 Logged post-gym using Yesterday toggle (so logged morning after)
-- Bloat: None / Mild / Bloated
+- Bloat tracked as two separate signals daily:
+  - Tummy: None / Mild / Bloated — typically gut, food, cycle related
+  - Face: None / Mild / Bloated — typically hormonal, sleep, sodium related
+  Face and tummy bloat tracked separately to identify different pattern causes. After 2–3 cycles cross-reference face bloat with ovulation window and tummy bloat with period dates.
 - Cycle: log period start date only, app shows days since
 - Food rhythm: First meal (before 9am / 9–11am / 11am–1pm / after 1pm or skipped) / Last meal (before 7pm / 7–9pm / after 9pm)
 All saves to body.json keyed by date.
@@ -83,6 +86,7 @@ Started: 19 May 2026
 Success condition: movement days clearly outnumber rest days most weeks. Moving feels like the default not the decision. Rest feels like recovery not relief. True for at least 3 weeks in a row.
 NOT stable if alternating movement and rest every day.
 Phase 2 ready indicator in app: 4 consecutive weeks of 5+ movement days. Zero tolerance — any week below 5 resets counter.
+App stable version date: 1 June 2026. All tracking fields finalised from this date. Movement data exists from 19 May 2026 and is valid for Phase 2 readiness graph. Wake log, body tracking, and bloat fields (tummy/face) are complete from 1 June 2026 — patterns before this date are partial. For data analysis at Phase 2 start: use full dataset from 1 June onwards for wake and body patterns. May movement data is valid and included in Phase 2 readiness graph calculation.
 
 ## Phase 2 — not started
 Focus: wake anchor + strength training attendance
