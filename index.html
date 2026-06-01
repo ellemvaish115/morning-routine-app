@@ -486,10 +486,17 @@
   <!-- Bloat -->
   <div class="body-section">
     <div class="body-section-title">Bloat</div>
+    <div class="body-sub-label">Tummy</div>
     <div class="n-chip-row">
-      <div class="n-chip" id="bl-none"    onclick="selectBloat('none')">None</div>
-      <div class="n-chip" id="bl-mild"    onclick="selectBloat('mild')">Mild</div>
-      <div class="n-chip" id="bl-bloated" onclick="selectBloat('bloated')">Bloated</div>
+      <div class="n-chip" id="bt-none"    onclick="selectBloatTummy('none')">None</div>
+      <div class="n-chip" id="bt-mild"    onclick="selectBloatTummy('mild')">Mild</div>
+      <div class="n-chip" id="bt-bloated" onclick="selectBloatTummy('bloated')">Bloated</div>
+    </div>
+    <div class="body-sub-label" style="margin-top:14px;">Face</div>
+    <div class="n-chip-row">
+      <div class="n-chip" id="bf-none"    onclick="selectBloatFace('none')">None</div>
+      <div class="n-chip" id="bf-mild"    onclick="selectBloatFace('mild')">Mild</div>
+      <div class="n-chip" id="bf-bloated" onclick="selectBloatFace('bloated')">Bloated</div>
     </div>
   </div>
 
@@ -699,7 +706,7 @@ function getDayData(key) {
 }
 
 function getBodyData(key) {
-  return bdata[key] || { bloat: null, cycleStart: false, firstMeal: null, lastMeal: null };
+  return bdata[key] || { bloat: null, bloat_tummy: null, bloat_face: null, cycleStart: false, firstMeal: null, lastMeal: null };
 }
 
 // ── TODAY ──
@@ -947,10 +954,14 @@ function renderWeekStats() {
       pills.appendChild(p);
     }
 
-    // Body dots
-    if (bdd.bloat === 'mild' || bdd.bloat === 'bloated') {
+    // Body dots — worst of tummy/face, fallback to legacy bloat field
+    const tummyB = bdd.bloat_tummy || bdd.bloat;
+    const faceB  = bdd.bloat_face;
+    const worstBloat = (tummyB === 'bloated' || faceB === 'bloated') ? 'bloated'
+                     : (tummyB === 'mild'    || faceB === 'mild')    ? 'mild' : null;
+    if (worstBloat) {
       const dot = document.createElement('div');
-      dot.className = 'bp-dot ' + (bdd.bloat === 'bloated' ? 'bloat-bloated' : 'bloat-mild');
+      dot.className = 'bp-dot ' + (worstBloat === 'bloated' ? 'bloat-bloated' : 'bloat-mild');
       pills.appendChild(dot);
     }
     if (bdd.cycleStart) {
@@ -1063,9 +1074,13 @@ function selectBodyDate(which) {
 function renderBody() {
   const bd = getBodyData(bodyDateKey);
 
-  // Bloat
+  // Bloat — tummy
   ['none','mild','bloated'].forEach(v => {
-    document.getElementById('bl-'+v).classList.toggle('selected', bd.bloat === v);
+    document.getElementById('bt-'+v).classList.toggle('selected', bd.bloat_tummy === v);
+  });
+  // Bloat — face
+  ['none','mild','bloated'].forEach(v => {
+    document.getElementById('bf-'+v).classList.toggle('selected', bd.bloat_face === v);
   });
 
   // Cycle — always shows last logged across all entries, always logs to today
@@ -1091,12 +1106,20 @@ function renderBody() {
   });
 }
 
-function selectBloat(val) {
+function selectBloatTummy(val) {
   if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
-  bdata[bodyDateKey].bloat = (bdata[bodyDateKey].bloat === val) ? null : val;
+  bdata[bodyDateKey].bloat_tummy = (bdata[bodyDateKey].bloat_tummy === val) ? null : val;
   renderBody();
   saveBody();
-  showToast(val.charAt(0).toUpperCase()+val.slice(1)+' ✓');
+  showToast('Tummy: '+val.charAt(0).toUpperCase()+val.slice(1));
+}
+
+function selectBloatFace(val) {
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  bdata[bodyDateKey].bloat_face = (bdata[bodyDateKey].bloat_face === val) ? null : val;
+  renderBody();
+  saveBody();
+  showToast('Face: '+val.charAt(0).toUpperCase()+val.slice(1));
 }
 
 function logCycle() {
