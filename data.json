@@ -99,6 +99,7 @@
     "ma": true
   },
   "2026-06-02": {
-    "move": "gym"
+    "move": "gym",
+    "getUpTime": "8:00"
   }
 }
