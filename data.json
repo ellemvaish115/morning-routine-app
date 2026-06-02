@@ -97,5 +97,8 @@
     "wakeHow": "neg",
     "sunpo": true,
     "ma": true
+  },
+  "2026-06-02": {
+    "move": "gym"
   }
 }
