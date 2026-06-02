@@ -101,6 +101,7 @@
   "2026-06-02": {
     "move": "gym",
     "getUpTime": "8:00",
-    "wakeTime": "7:00"
+    "wakeTime": "7:00",
+    "wakeHow": "neg"
   }
 }
