@@ -107,6 +107,7 @@
   "2026-06-03": {
     "move": "floor",
     "wakeTime": "9:00",
-    "getUpTime": "10:00"
+    "getUpTime": "10:00",
+    "sunpo": true
   }
 }
