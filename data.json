@@ -105,6 +105,7 @@
     "wakeHow": "neg"
   },
   "2026-06-03": {
-    "move": "floor"
+    "move": "floor",
+    "wakeTime": "9:00"
   }
 }
