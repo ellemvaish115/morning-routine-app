@@ -49,6 +49,7 @@
     "sleep_time": "0:00"
   },
   "2026-06-03": {
-    "bloat_face": "none"
+    "bloat_face": "none",
+    "bloat_tummy": "none"
   }
 }
