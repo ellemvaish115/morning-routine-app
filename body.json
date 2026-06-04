@@ -57,6 +57,7 @@
   },
   "2026-06-04": {
     "bloat_tummy": "none",
-    "bloat_face": "none"
+    "bloat_face": "none",
+    "firstMeal": "after-1"
   }
 }
