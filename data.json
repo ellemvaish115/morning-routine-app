@@ -114,5 +114,23 @@
     "move": "rest",
     "wakeTime": "9:30",
     "getUpTime": "12:00"
+  },
+  "2026-06-05": {
+    "move": "floor",
+    "woke_at": "09:00",
+    "got_up_at": "11:00",
+    "then": "just lay there",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-06-06": {
+    "move": "rest",
+    "woke_at": "09:00",
+    "got_up_at": "09:30",
+    "then": "got up straight away",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
   }
 }
