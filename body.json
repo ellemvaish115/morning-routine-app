@@ -11,8 +11,8 @@
     "lastMeal": "after-9"
   },
   "2026-05-28": {
-    "cycleStart": false,
     "bloat": "none",
+    "cycleStart": false,
     "firstMeal": "after-1",
     "lastMeal": "7-9"
   },
@@ -28,22 +28,22 @@
   },
   "2026-05-31": {
     "bloat": "bloated",
-    "firstMeal": "9-11",
-    "lastMeal": "7-9",
     "bloat_face": "bloated",
     "bloat_tummy": "none",
+    "firstMeal": "9-11",
+    "lastMeal": "7-9",
     "sleep_time": "23:30"
   },
   "2026-06-01": {
-    "bloat_tummy": "none",
     "bloat_face": "bloated",
+    "bloat_tummy": "none",
     "firstMeal": "9-11",
     "lastMeal": "7-9",
     "sleep_time": "0:00"
   },
   "2026-06-02": {
-    "bloat_tummy": "none",
     "bloat_face": "mild",
+    "bloat_tummy": "none",
     "firstMeal": "9-11",
     "lastMeal": "7-9",
     "sleep_time": "0:00"
@@ -56,16 +56,23 @@
     "sleep_time": "2:30"
   },
   "2026-06-04": {
-    "bloat_tummy": "none",
     "bloat_face": "none",
+    "bloat_tummy": "none",
     "firstMeal": "after-1",
     "sleep_time": "14:00"
   },
-  "2026-06-06": {
-    "bloat_tummy": "none",
+  "2026-06-05": {
     "bloat_face": "none",
-    "sleep_time": "0:00",
+    "bloat_tummy": "none",
     "firstMeal": "11-1",
-    "lastMeal": "7-9"
+    "lastMeal": "7-9",
+    "sleep_time": "03:00"
+  },
+  "2026-06-06": {
+    "bloat_face": "none",
+    "bloat_tummy": "none",
+    "firstMeal": "11-1",
+    "lastMeal": "7-9",
+    "sleep_time": "0:00"
   }
 }
