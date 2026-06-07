@@ -135,6 +135,7 @@
   },
   "2026-06-07": {
     "move": "rest",
-    "wakeTime": "8:00"
+    "wakeTime": "8:00",
+    "getUpTime": "8:30"
   }
 }
