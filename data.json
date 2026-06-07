@@ -134,6 +134,7 @@
     "ma": false
   },
   "2026-06-07": {
-    "move": "rest"
+    "move": "rest",
+    "wakeTime": "8:00"
   }
 }
