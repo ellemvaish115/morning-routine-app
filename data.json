@@ -100,8 +100,8 @@
   },
   "2026-06-02": {
     "move": "gym",
-    "getUpTime": "8:00",
     "wakeTime": "7:00",
+    "getUpTime": "8:00",
     "wakeHow": "neg"
   },
   "2026-06-03": {
@@ -117,18 +117,18 @@
   },
   "2026-06-05": {
     "move": "floor",
-    "woke_at": "09:00",
-    "got_up_at": "11:00",
-    "then": "just lay there",
+    "wakeTime": "9:00",
+    "getUpTime": "11:00",
+    "wakeHow": "lay",
     "wabi": false,
     "sunpo": false,
     "ma": false
   },
   "2026-06-06": {
     "move": "rest",
-    "woke_at": "09:00",
-    "got_up_at": "09:30",
-    "then": "got up straight away",
+    "wakeTime": "9:00",
+    "getUpTime": "9:30",
+    "wakeHow": "straight",
     "wabi": false,
     "sunpo": false,
     "ma": false
