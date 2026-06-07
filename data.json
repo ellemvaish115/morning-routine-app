@@ -132,5 +132,8 @@
     "wabi": false,
     "sunpo": false,
     "ma": false
+  },
+  "2026-06-07": {
+    "move": "rest"
   }
 }
