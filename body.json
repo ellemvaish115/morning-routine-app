@@ -58,13 +58,14 @@
   "2026-06-04": {
     "bloat_tummy": "none",
     "bloat_face": "none",
-    "firstMeal": "after-1"
+    "firstMeal": "after-1",
+    "sleep_time": "14:00"
   },
   "2026-06-06": {
     "bloat_tummy": "none",
     "bloat_face": "none",
     "sleep_time": "03:00",
-    "first_meal": "11-1",
-    "last_meal": "7-9"
+    "firstMeal": "11-1",
+    "lastMeal": "7-9"
   }
 }
