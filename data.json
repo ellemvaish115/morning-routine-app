@@ -141,6 +141,7 @@
   },
   "2026-06-08": {
     "move": "floor",
-    "wakeTime": "10:00"
+    "wakeTime": "10:00",
+    "getUpTime": "10:30"
   }
 }
