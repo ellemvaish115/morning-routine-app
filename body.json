@@ -80,5 +80,8 @@
     "bloat_face": "none",
     "firstMeal": "9-11",
     "lastMeal": "7-9"
+  },
+  "2026-06-08": {
+    "bloat_tummy": "mild"
   }
 }
