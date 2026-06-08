@@ -140,6 +140,7 @@
     "wakeHow": "straight"
   },
   "2026-06-08": {
-    "move": "floor"
+    "move": "floor",
+    "wakeTime": "10:00"
   }
 }
