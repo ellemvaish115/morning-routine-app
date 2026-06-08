@@ -138,5 +138,8 @@
     "wakeTime": "8:30",
     "getUpTime": "8:30",
     "wakeHow": "straight"
+  },
+  "2026-06-08": {
+    "move": "floor"
   }
 }
