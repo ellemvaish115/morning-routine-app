@@ -102,6 +102,7 @@
     "sleep_time": "2:00"
   },
   "2026-06-11": {
-    "bloat_tummy": "bloated"
+    "bloat_tummy": "bloated",
+    "bloat_face": "bloated"
   }
 }
