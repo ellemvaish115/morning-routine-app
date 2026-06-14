@@ -162,6 +162,7 @@
   "2026-06-12": {
     "move": "rest",
     "wakeTime": "10:00",
-    "getUpTime": "12:00"
+    "getUpTime": "12:00",
+    "wabi": true
   }
 }
