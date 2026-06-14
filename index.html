@@ -279,6 +279,9 @@
   /* override wake-time-row margins inside a tab-card */
   .tab-card .wake-time-row { margin: 0 -16px; padding: 2px 16px 4px; }
 
+  /* WEEK ARROW DISABLED STATE */
+  .week-arrow.disabled { opacity: 0.2; pointer-events: none; }
+
   /* WAKE LABEL (reusable row label inside cards) */
   .wake-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); }
 </style>
@@ -315,8 +318,14 @@
 <!-- ══ TODAY ══ -->
 <div class="tab-content active" id="tab-today">
 
+  <div class="week-nav" style="padding:16px 24px 0;">
+    <div class="week-arrow" onclick="changeTodayDate(-1)">‹</div>
+    <div class="week-label" id="today-date-label">—</div>
+    <div class="week-arrow" id="today-fwd-arrow" onclick="changeTodayDate(1)">›</div>
+  </div>
+
   <!-- Card 1: Move -->
-  <div class="tab-card amber-border" style="margin-top:16px;">
+  <div class="tab-card amber-border" style="margin-top:10px;">
     <div class="tab-card-title">Move</div>
     <div class="move-grid">
       <div class="move-pill" id="pill-gym" onclick="selectMove('gym')">
@@ -536,9 +545,10 @@
 <!-- ══ BODY ══ -->
 <div class="tab-content" id="tab-body">
 
-  <div class="body-date-toggle">
-    <div class="bdt-opt active" id="bdt-today"     onclick="selectBodyDate('today')">Today</div>
-    <div class="bdt-opt"        id="bdt-yesterday" onclick="selectBodyDate('yesterday')">Yesterday</div>
+  <div class="week-nav" style="padding:16px 24px 0;">
+    <div class="week-arrow" onclick="changeBodyDate(-1)">‹</div>
+    <div class="week-label" id="body-date-label">—</div>
+    <div class="week-arrow" id="body-fwd-arrow" onclick="changeBodyDate(1)">›</div>
   </div>
 
   <!-- Card 1: Bloat -->
@@ -766,9 +776,29 @@ function getBodyData(key) {
 }
 
 // ── TODAY ──
-const currentDay = todayKey();
+let currentDay = todayKey();
+
+function renderTodayDateNav() {
+  const d = new Date(currentDay + 'T00:00:00');
+  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('today-date-label').textContent =
+    `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+  document.getElementById('today-fwd-arrow').classList.toggle('disabled', currentDay >= todayKey());
+}
+
+function changeTodayDate(dir) {
+  const d = new Date(currentDay + 'T00:00:00');
+  d.setDate(d.getDate() + dir);
+  const key = dateToKey(d);
+  if (key > todayKey()) return;
+  currentDay = key;
+  renderTodayDateNav();
+  renderToday();
+}
 
 function renderToday() {
+  renderTodayDateNav();
   const d = getDayData(currentDay);
   MOVE_OPTS.forEach(m => {
     const p = document.getElementById('pill-'+m);
@@ -1149,15 +1179,27 @@ function deleteLift(lift, id) {
 // ── BODY TAB ──
 let bodyDateKey = todayKey();
 
-function selectBodyDate(which) {
-  const yest = new Date(); yest.setDate(yest.getDate()-1);
-  bodyDateKey = which === 'yesterday' ? dateToKey(yest) : todayKey();
-  document.getElementById('bdt-today').classList.toggle('active', which === 'today');
-  document.getElementById('bdt-yesterday').classList.toggle('active', which === 'yesterday');
+function renderBodyDateNav() {
+  const d = new Date(bodyDateKey + 'T00:00:00');
+  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('body-date-label').textContent =
+    `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+  document.getElementById('body-fwd-arrow').classList.toggle('disabled', bodyDateKey >= todayKey());
+}
+
+function changeBodyDate(dir) {
+  const d = new Date(bodyDateKey + 'T00:00:00');
+  d.setDate(d.getDate() + dir);
+  const key = dateToKey(d);
+  if (key > todayKey()) return;
+  bodyDateKey = key;
+  renderBodyDateNav();
   renderBody();
 }
 
 function renderBody() {
+  renderBodyDateNav();
   const bd = getBodyData(bodyDateKey);
 
   // Bloat toggle
@@ -1377,6 +1419,8 @@ async function init() {
   ['deadlift','squat','pushup','pullup','pushup_assisted','pushup_full','pullup_deadhang','pullup_negatives','pullup_unassisted'].forEach(l => { if (!sdata[l]) sdata[l] = []; });
 
   setHeaderDate();
+  renderTodayDateNav();
+  renderBodyDateNav();
   renderToday();
   renderWeekStats();
 }
