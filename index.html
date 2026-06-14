@@ -1295,9 +1295,8 @@ function selectActiveMeal(val) {
 }
 
 function logCycle() {
-  const today = todayKey();
-  if (!bdata[today]) bdata[today] = {};
-  bdata[today].cycleStart = true;
+  if (!bdata[bodyDateKey]) bdata[bodyDateKey] = {};
+  bdata[bodyDateKey].cycleStart = true;
   renderBody();
   saveBody();
   showToast('Period start logged');
