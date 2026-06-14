@@ -148,6 +148,7 @@
   },
   "2026-06-09": {
     "move": "gym",
-    "wakeTime": "9:00"
+    "wakeTime": "9:00",
+    "getUpTime": "10:30"
   }
 }
