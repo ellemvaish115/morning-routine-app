@@ -87,5 +87,8 @@
     "firstMeal": "9-11",
     "lastMeal": "after-9",
     "sleep_time": "2:00"
+  },
+  "2026-06-09": {
+    "bloat_tummy": "none"
   }
 }
