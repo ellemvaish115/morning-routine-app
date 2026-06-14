@@ -166,6 +166,7 @@
     "wabi": true
   },
   "2026-06-13": {
-    "move": "floor"
+    "move": "floor",
+    "wakeTime": "10:00"
   }
 }
