@@ -169,6 +169,7 @@
     "move": "floor",
     "wakeTime": "10:00",
     "getUpTime": "11:00",
-    "wakeHow": "straight"
+    "wakeHow": "straight",
+    "wabi": true
   }
 }
