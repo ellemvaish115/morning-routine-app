@@ -1220,7 +1220,13 @@ function renderBody() {
   document.getElementById('meal-tab-last').classList.toggle('active',  mealActiveTab === 'last');
   buildMealChips(bd);
 
-  // Cycle
+  // Cycle button label — shows selected date so user knows exactly what will be logged
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const bdn = new Date(bodyDateKey + 'T00:00:00');
+  const bdLabel = bodyDateKey === todayKey() ? 'today' : `${bdn.getDate()} ${months[bdn.getMonth()]}`;
+  document.querySelector('.cycle-btn').textContent = `Log period start — ${bdLabel}`;
+
+  // Cycle last-logged info
   const lastCycle = Object.keys(bdata).filter(k => bdata[k].cycleStart).sort().pop();
   const cycleInfo = document.getElementById('cycle-info');
   if (lastCycle) {
