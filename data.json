@@ -147,6 +147,7 @@
     "wabi": true
   },
   "2026-06-09": {
-    "move": "gym"
+    "move": "gym",
+    "wakeTime": "9:00"
   }
 }
