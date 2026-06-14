@@ -119,6 +119,7 @@
     "bloat_tummy": "bloated",
     "bloat_face": "mild",
     "sleep_time": "3:00",
-    "firstMeal": "11-1"
+    "firstMeal": "11-1",
+    "lastMeal": "after-9"
   }
 }
