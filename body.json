@@ -111,6 +111,7 @@
   "2026-06-12": {
     "bloat_tummy": "bloated",
     "bloat_face": "bloated",
-    "sleep_time": "3:00"
+    "sleep_time": "3:00",
+    "firstMeal": "11-1"
   }
 }
