@@ -85,6 +85,7 @@
     "bloat_tummy": "mild",
     "bloat_face": "none",
     "firstMeal": "9-11",
-    "lastMeal": "after-9"
+    "lastMeal": "after-9",
+    "sleep_time": "2:00"
   }
 }
