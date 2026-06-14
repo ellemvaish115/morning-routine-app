@@ -121,5 +121,8 @@
     "sleep_time": "3:00",
     "firstMeal": "11-1",
     "lastMeal": "after-9"
+  },
+  "2026-06-14": {
+    "cycleStart": true
   }
 }
