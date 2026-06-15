@@ -180,6 +180,6 @@
   },
   "2026-06-15": {
     "wabi": true,
-    "wakeTime": null
+    "wakeTime": "10:00"
   }
 }
