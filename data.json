@@ -171,5 +171,8 @@
     "getUpTime": "11:00",
     "wakeHow": "straight",
     "wabi": true
+  },
+  "2026-06-14": {
+    "move": "floor"
   }
 }
