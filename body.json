@@ -126,6 +126,7 @@
   "2026-06-14": {
     "bloat_tummy": "mild",
     "bloat_face": "mild",
-    "sleep_time": "0:00"
+    "sleep_time": "0:00",
+    "firstMeal": "after-1"
   }
 }
