@@ -179,6 +179,7 @@
     "wakeHow": "lay"
   },
   "2026-06-15": {
-    "wabi": true
+    "wabi": true,
+    "wakeTime": "8:00"
   }
 }
