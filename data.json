@@ -187,6 +187,7 @@
     "move": "gym",
     "wakeTime": "7:00",
     "getUpTime": "7:30",
-    "wakeHow": "neg"
+    "wakeHow": "neg",
+    "ma": true
   }
 }
