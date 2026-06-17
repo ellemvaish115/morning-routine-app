@@ -144,6 +144,7 @@
   "2026-06-16": {
     "bloat_tummy": "none",
     "bloat_face": "none",
-    "sleep_time": "1:00"
+    "sleep_time": "1:00",
+    "firstMeal": "9-11"
   }
 }
