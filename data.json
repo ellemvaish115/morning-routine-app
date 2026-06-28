@@ -191,6 +191,7 @@
     "ma": true
   },
   "2026-06-28": {
-    "move": "floor"
+    "move": "floor",
+    "wakeTime": "6:30"
   }
 }
