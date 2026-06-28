@@ -197,6 +197,7 @@
     "wakeHow": "straight"
   },
   "2026-06-27": {
-    "move": "rest"
+    "move": "rest",
+    "wakeTime": "8:00"
   }
 }
