@@ -189,5 +189,8 @@
     "getUpTime": "7:30",
     "wakeHow": "neg",
     "ma": true
+  },
+  "2026-06-28": {
+    "move": "floor"
   }
 }
