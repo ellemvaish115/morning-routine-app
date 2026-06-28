@@ -208,5 +208,8 @@
     "getUpTime": "8:00",
     "wakeHow": "straight",
     "sunpo": true
+  },
+  "2026-06-25": {
+    "move": "rest"
   }
 }
