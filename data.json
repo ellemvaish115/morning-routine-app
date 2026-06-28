@@ -203,6 +203,7 @@
     "wakeHow": "lay"
   },
   "2026-06-26": {
-    "move": "floor"
+    "move": "floor",
+    "wakeTime": "7:30"
   }
 }
