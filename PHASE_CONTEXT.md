@@ -27,6 +27,17 @@ Data files:
 - body.json — bloat, cycle, food rhythm
 - strength.json — PR log
 
+## App — current version
+Live at: ellemvaish115.github.io/morning-routine-app
+Single screen. Calendar tap to log show-up. 
+Milestone icons on calendar: ⭐ day 10, 🤩 day 20, 🏆 day 30, cycling.
+Medal header: 🎖️ per 10 days earned, greyed until earned.
+Chapter 1 footer: 18/22 weeks (static).
+Chapter 2 footer: live count from data.json.
+Body and strength data archived in body.json, strength.json, 
+data_archive.json — not shown in UI currently. Available for 
+Phase 3 analysis.
+
 ## Current routine structure
 Gym days: Tue, Thu, Sat — strength training with online coach, gym in apartment building
 Other days: 15 min inclined treadmill
@@ -171,8 +182,18 @@ Tier system exists but gym day window is the only
 hard target. Everything else has flex built in.
 
 ## Phase 3 — not started
-Focus: full routine
-Wabi and Sunpo fold into morning naturally once wake anchor is stable. They are already liked — they just need the wake anchor to exist first before they can follow.
+Trigger: 184 days complete (13 Dec 2026)
+Focus: Strength goal driven. By end of Phase 2 there will be 
+6 months of movement data. Phase 3 is about adding structure 
+to what is already a daily habit. Likely focus areas:
+- Strength goals: deadlift 80kg, squat 60kg, 15 push-ups 
+  full form, 1 pull-up unassisted
+- Wake window stable and no longer needs tracking
+- Morning routine (wabi/sunpo/ma) fully natural
+- Phase 3 system to be designed fresh based on Phase 2 data
+
+How to start Phase 3: open new Claude conversation, upload 
+PHASE_CONTEXT.md, say ready for Phase 3.
 
 ## Possible future additions (discussed, not built)
 - Food timing improvement (currently just tracking rhythm, not fixing yet)
