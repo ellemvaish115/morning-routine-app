@@ -2,488 +2,572 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Morning OS</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0d0f;
-    --surface: #141416;
-    --surface2: #1c1c1f;
-    --border: #2a2a2e;
-    --text: #f0ede8;
-    --muted: #6b6870;
-    --dim: #3d3b42;
-    --amber: #e8a54b;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #0d0d0f;
+    color: #f0ede8;
     font-family: 'DM Mono', monospace;
-    min-height: 100vh;
-    padding: 56px 28px 80px;
-    max-width: 400px;
+  }
+
+  .app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 44px 20px 28px;
+    max-width: 430px;
     margin: 0 auto;
-    -webkit-font-smoothing: antialiased;
   }
-  .header { margin-bottom: 32px; }
-  .header-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 28px;
-    font-style: italic;
-    color: var(--text);
-    margin-bottom: 16px;
+
+  /* LOADING */
+  .loading {
+    position: fixed;
+    inset: 0;
+    background: #0d0d0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #3d3b42;
   }
-  .counter { display: flex; align-items: baseline; gap: 10px; }
+
+  .loading.hidden { display: none; }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-shrink: 0;
+  }
+
   .counter-num {
     font-family: 'DM Serif Display', serif;
-    font-size: 52px;
-    color: var(--amber);
+    font-size: 56px;
     line-height: 1;
-    font-variant-numeric: tabular-nums;
+    color: #e8a54b;
+    margin-bottom: 3px;
+    transition: opacity 0.3s;
   }
-  .counter-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
-  .divider { height: 1px; background: var(--border); margin: 28px 0 24px; }
+
+  .counter-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4a4850;
+  }
+
+  .medals-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 8px;
+    gap: 5px;
+  }
+
+  .medals-row { display: flex; gap: 6px; }
+  .medal { font-size: 22px; line-height: 1; }
+  .medal.unearned { opacity: 0.15; }
+
+  .medal-label { font-size: 9px; color: #3d3b42; text-align: right; }
+  .medal-label span { color: #6b6870; }
+
+  /* MONTH NAV */
   .month-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
   }
+
   .month-label {
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #6b6870;
   }
-  .month-arrow {
-    width: 30px; height: 30px;
-    display: flex; align-items: center; justify-content: center;
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: #3d3b42;
+    font-size: 20px;
     cursor: pointer;
-    font-size: 18px;
-    color: var(--dim);
-    border-radius: 6px;
-    transition: all 0.15s;
-    user-select: none;
+    padding: 2px 10px;
+    font-family: 'DM Mono', monospace;
+    line-height: 1;
     -webkit-tap-highlight-color: transparent;
   }
-  .month-arrow:hover { color: var(--amber); background: rgba(232,165,75,0.08); }
-  .month-arrow.disabled { opacity: 0.2; pointer-events: none; }
+  .nav-btn:disabled { opacity: 0.15; cursor: default; }
+
+  /* DAY NAMES */
   .day-names {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 8px;
+    gap: 4px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
   }
+
   .day-name {
     text-align: center;
     font-size: 9px;
-    letter-spacing: 0.1em;
-    color: var(--dim);
-    padding-bottom: 4px;
+    color: #2a2a2e;
+    padding: 2px 0;
   }
+
+  /* CALENDAR WRAPPER */
+  .cal-wrapper {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+  }
+
   .cal-grid {
+    position: absolute;
+    inset: 0;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 4px;
   }
+
   .cal-day {
-    aspect-ratio: 1;
-    border-radius: 50%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    color: var(--dim);
-    position: relative;
-    transition: transform 0.12s, background 0.15s;
-    user-select: none;
+    border-radius: 8px;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    gap: 2px;
+    overflow: visible;
+    min-width: 0;
+    min-height: 0;
+    transition: transform 0.1s;
   }
-  .cal-day.in-month { color: var(--muted); }
-  .cal-day.tappable { cursor: pointer; }
-  .cal-day.tappable:hover { background: var(--surface2); }
-  .cal-day.tappable:active { transform: scale(0.87); }
-  .cal-day.is-today {
-    outline: 1.5px solid rgba(232,165,75,0.4);
-    outline-offset: -1px;
+
+  .cal-day:active { transform: scale(0.93); }
+  .cal-day.empty { cursor: default; }
+  .cal-day.empty:active { transform: none; }
+  .cal-day.future { opacity: 0.1; cursor: default; }
+  .cal-day.future:active { transform: none; }
+  .cal-day.past { border: 1px solid #1e1e22; }
+
+  .cal-day.showed-up {
+    background: rgba(232,165,75,0.09);
+    border: 1px solid rgba(232,165,75,0.22);
   }
-  .cal-day.checked { background: var(--amber); }
-  .cal-day.checked:hover { background: var(--amber); }
-  .day-num { font-variant-numeric: tabular-nums; }
-  .cal-day.checked .day-num { display: none; }
-  .cal-day.checked::before {
-    content: '✓';
-    font-size: 13px;
-    font-weight: 700;
-    color: #0d0d0f;
+
+  .cal-day.milestone-day {
+    background: rgba(232,165,75,0.18);
+    border: 2px solid rgba(232,165,75,0.5);
   }
-  .star-badge {
-    position: absolute;
-    top: 0; right: 0;
-    font-size: 9px;
+
+  .cal-day.today-ring {
+    border: 2px solid #e8a54b !important;
+  }
+
+  .day-num {
+    font-size: 11px;
+    color: #2a2a2e;
     line-height: 1;
-    pointer-events: none;
-    transform: translate(25%, -25%);
   }
-  .footer {
-    margin-top: 44px;
-    text-align: center;
-    font-size: 10px;
-    color: var(--dim);
-    cursor: pointer;
-    letter-spacing: 0.06em;
-    transition: color 0.15s;
+  .cal-day.showed-up .day-num { color: #e8a54b; }
+  .cal-day.today-ring .day-num { color: #e8a54b; }
+
+  .day-milestone-icon {
+    font-size: 18px;
+    line-height: 1;
   }
-  .footer:hover { color: var(--muted); }
-  .setup-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 200;
-    padding: 60px 28px 40px;
-    overflow-y: auto;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-  .setup-overlay.visible { display: flex; }
-  .setup-eyebrow {
+
+  .day-tick {
     font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--amber);
-    margin-bottom: 12px;
+    color: rgba(232,165,75,0.3);
+    line-height: 1;
   }
-  .setup-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 26px;
-    font-style: italic;
-    color: var(--text);
-    margin-bottom: 16px;
-    line-height: 1.2;
-  }
-  .setup-body {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 24px;
-  }
-  .setup-body strong { color: var(--text); font-weight: 500; }
-  .setup-body code {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--amber);
-    background: rgba(232,165,75,0.1);
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-  .setup-input {
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 12px 14px;
-    width: 100%;
-    margin-bottom: 12px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .setup-input:focus { border-color: var(--amber); }
-  .setup-input::placeholder { color: var(--dim); }
-  .setup-btn {
-    background: rgba(232,165,75,0.1);
-    border: 1px solid rgba(232,165,75,0.3);
-    border-radius: 8px;
-    color: var(--amber);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    padding: 13px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .setup-btn:hover { background: var(--amber); color: #0d0d0f; }
-  .setup-back {
-    margin-top: 28px;
-    text-align: center;
-    font-size: 10px;
-    color: var(--dim);
-    cursor: pointer;
-    letter-spacing: 0.06em;
-  }
-  .setup-back:hover { color: var(--muted); }
-  .toast {
+
+  /* SAVE INDICATOR */
+  .save-dot {
     position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 9px 20px;
-    font-size: 12px;
-    color: var(--text);
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    z-index: 100;
-    white-space: nowrap;
-    pointer-events: none;
+    top: 16px;
+    right: 16px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #e8a54b;
+    opacity: 0;
+    transition: opacity 0.3s;
   }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .save-dot.saving { opacity: 1; }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid #1a1a1e;
+    padding-top: 12px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .chapter { display: flex; align-items: center; gap: 8px; }
+
+  .chapter-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .chapter-dot.done { background: #2a2a2e; }
+  .chapter-dot.active { background: #e8a54b; }
+
+  .chapter-text { flex: 1; font-size: 9px; color: #3d3b42; min-width: 0; }
+  .chapter-text.active { color: #6b6870; }
+  .chapter-count { font-size: 9px; color: #3d3b42; white-space: nowrap; flex-shrink: 0; }
+  .chapter-count.active { color: #e8a54b; }
 </style>
 </head>
 <body>
 
-<div class="setup-overlay" id="setup-overlay">
-  <div class="setup-eyebrow">One-time setup</div>
-  <div class="setup-title">Connect to GitHub</div>
-  <div class="setup-body">
-    Paste a GitHub Personal Access Token with <code>repo</code> scope to save your log to <strong>ellemvaish115/morning-routine-app</strong>.<br><br>
-    Stored on this device only — never committed to the repo.
+<div class="loading" id="loading">loading</div>
+<div class="save-dot" id="saveDot"></div>
+
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="counter-num" id="counterNum">—</div>
+      <div class="counter-label">days showed up</div>
+    </div>
+    <div class="medals-block">
+      <div class="medals-row" id="medalsRow"></div>
+      <div class="medal-label" id="medalLabel"></div>
+    </div>
   </div>
-  <input class="setup-input" id="setup-token-input" type="password" placeholder="github_pat_…" autocomplete="off" />
-  <div class="setup-btn" onclick="connectGitHub()">Save &amp; Connect →</div>
-  <div class="setup-back" onclick="closeSetup()">← Back</div>
-</div>
 
-<div class="header">
-  <div class="header-title">Morning OS</div>
-  <div class="counter">
-    <div class="counter-num" id="counter-num">0</div>
-    <div class="counter-label">days showed up</div>
+  <div class="month-nav">
+    <button class="nav-btn" id="prevBtn" onclick="changeMonth(-1)">‹</button>
+    <div class="month-label" id="monthLabel"></div>
+    <button class="nav-btn" id="nextBtn" onclick="changeMonth(1)">›</button>
+  </div>
+
+  <div class="day-names">
+    <div class="day-name">M</div><div class="day-name">T</div>
+    <div class="day-name">W</div><div class="day-name">T</div>
+    <div class="day-name">F</div><div class="day-name">S</div>
+    <div class="day-name">S</div>
+  </div>
+
+  <div class="cal-wrapper">
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <div class="footer">
+    <div class="chapter">
+      <div class="chapter-dot done"></div>
+      <div class="chapter-text">Weekly · 20 Jan – 20 Jun</div>
+      <div class="chapter-count">18 / 22 wks</div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-dot active"></div>
+      <div class="chapter-text active">Daily · 13 Jul – 13 Dec</div>
+      <div class="chapter-count active" id="chapterCount">—</div>
+    </div>
   </div>
 </div>
-
-<div class="divider"></div>
-
-<div class="month-nav">
-  <div class="month-arrow" id="prev-month" onclick="changeMonth(-1)">‹</div>
-  <div class="month-label" id="month-label">—</div>
-  <div class="month-arrow" id="next-month" onclick="changeMonth(1)">›</div>
-</div>
-
-<div class="day-names">
-  <div class="day-name">M</div>
-  <div class="day-name">T</div>
-  <div class="day-name">W</div>
-  <div class="day-name">T</div>
-  <div class="day-name">F</div>
-  <div class="day-name">S</div>
-  <div class="day-name">S</div>
-</div>
-
-<div class="cal-grid" id="cal-grid"></div>
-
-<div class="footer" onclick="showSetup()">⚙ settings</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-const GH_OWNER  = 'ellemvaish115';
-const GH_REPO   = 'morning-routine-app';
-const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
-const START_DATE = '2026-07-13';
+  // ── CONFIG ──
+  var GITHUB_OWNER = 'ellemvaish115';
+  var GITHUB_REPO  = 'morning-routine-app';
+  var GITHUB_FILE  = 'data.json';
 
-function getToken() { return localStorage.getItem('gh_token') || ''; }
-function b64enc(str) { return btoa(unescape(encodeURIComponent(str))); }
-function b64dec(str) { return decodeURIComponent(escape(atob(str))); }
+  var CHAPTER2_START = '2026-07-13';
+  var CHAPTER2_END   = '2026-12-13';
+  var TOTAL_DAYS     = 184;
+  var CAL_START_MONTH = 6; // July = month 6 (0-indexed) — earliest navigable month
 
-async function ghGet(filename) {
-  try {
-    const res = await fetch(`${GH_API}/${filename}?t=${Date.now()}`, {
-      headers: { Accept: 'application/vnd.github.v3+json' }
+  var CAL_MILESTONES = { 10:'⭐', 20:'🤩', 30:'🏆', 40:'⭐', 50:'🤩', 60:'🏆',
+                         70:'⭐', 80:'🤩', 90:'🏆', 100:'⭐', 110:'🤩', 120:'🏆',
+                         130:'⭐', 140:'🤩', 150:'🏆', 160:'⭐', 170:'🤩', 180:'🏆' };
+
+  // ── STATE ──
+  var showed = {};      // date string -> true/false
+  var milestones = {};  // date string -> emoji
+  var fileSha = '';     // GitHub file SHA for updates
+  var isSaving = false;
+
+  var TODAY = new Date();
+  TODAY.setHours(0,0,0,0);
+
+  var viewYear  = TODAY.getFullYear();
+  var viewMonth = TODAY.getMonth();
+
+  var MONTHS = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+
+  // ── AUTH ──
+  // Token lives only in this browser's localStorage — never in the page
+  // source or the repo, since index.html is served publicly.
+  function getToken() {
+    var t = localStorage.getItem('gh_token');
+    if (!t) {
+      t = window.prompt('GitHub token (repo scope):');
+      if (t) localStorage.setItem('gh_token', t.trim());
+    }
+    return t || '';
+  }
+
+  // ── GITHUB API ──
+  function apiUrl() {
+    return 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO +
+           '/contents/' + GITHUB_FILE;
+  }
+
+  function authHeaders() {
+    return {
+      'Authorization': 'token ' + getToken(),
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    };
+  }
+
+  function loadData() {
+    fetch(apiUrl(), { headers: authHeaders() })
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        fileSha = json.sha;
+        var content = atob(json.content.replace(/\n/g, ''));
+        var parsed = JSON.parse(content);
+        // Extract only date keys (YYYY-MM-DD) with boolean values
+        showed = {};
+        var keys = Object.keys(parsed);
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof parsed[k] === 'boolean') {
+            showed[k] = parsed[k];
+          }
+        }
+        computeMilestones();
+        updateHeader();
+        renderCalendar();
+        document.getElementById('loading').classList.add('hidden');
+      })
+      .catch(function() {
+        // Offline fallback — show empty state
+        computeMilestones();
+        updateHeader();
+        renderCalendar();
+        document.getElementById('loading').classList.add('hidden');
+      });
+  }
+
+  function saveData() {
+    if (isSaving) return;
+    isSaving = true;
+    document.getElementById('saveDot').classList.add('saving');
+
+    // Build full data object preserving metadata
+    var data = {
+      '_chapter2_start': CHAPTER2_START,
+      '_chapter2_end': CHAPTER2_END,
+      '_chapter1': '18 weeks weekly consistency 20 Jan - 20 Jun 2026'
+    };
+    var keys = Object.keys(showed);
+    for (var i = 0; i < keys.length; i++) {
+      data[keys[i]] = showed[keys[i]];
+    }
+
+    var body = JSON.stringify({
+      message: 'update: ' + todayKey(),
+      content: btoa(JSON.stringify(data, null, 2)),
+      sha: fileSha
     });
-    if (res.status === 404) return { sha: null, content: null };
-    if (!res.ok) return null;
-    const json = await res.json();
-    return { sha: json.sha, content: JSON.parse(b64dec(json.content.replace(/\n/g, ''))) };
-  } catch { return null; }
-}
 
-async function ghPut(filename, content, sha) {
-  const body = {
-    message: `update ${filename}`,
-    content: b64enc(JSON.stringify(content, null, 2)),
-    ...(sha ? { sha } : {})
-  };
-  try {
-    const res = await fetch(`${GH_API}/${filename}`, {
+    fetch(apiUrl(), {
       method: 'PUT',
-      headers: {
-        Authorization: `token ${getToken()}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+      headers: authHeaders(),
+      body: body
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(json) {
+      if (json.content) fileSha = json.content.sha;
+      isSaving = false;
+      setTimeout(function() {
+        document.getElementById('saveDot').classList.remove('saving');
+      }, 800);
+    })
+    .catch(function() {
+      isSaving = false;
+      document.getElementById('saveDot').classList.remove('saving');
     });
-    if (!res.ok) { showToast('⚠ Save failed'); return null; }
-    return (await res.json()).content.sha;
-  } catch { showToast('⚠ Network error'); return null; }
-}
-
-let data     = {};
-let dataSha  = null;
-let saveTimer  = null;
-let saveChain  = Promise.resolve();
-
-function saveData() {
-  if (!getToken()) { showSetup(); return; }
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    saveChain = saveChain.then(async () => {
-      if (!dataSha) { const r = await ghGet('data.json'); if (r) dataSha = r.sha; }
-      const sha = await ghPut('data.json', data, dataSha);
-      if (sha) dataSha = sha;
-    });
-  }, 600);
-}
-
-function todayKey() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function mkKey(y, m, d) {
-  return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-}
-function shiftKey(key, n) {
-  const d = new Date(key + 'T00:00:00');
-  d.setDate(d.getDate() + n);
-  return mkKey(d.getFullYear(), d.getMonth()+1, d.getDate());
-}
-
-function checkRunAt(key) {
-  for (let i = 0; i < 10; i++) {
-    if (!data[shiftKey(key, -i)]) return false;
   }
-  return true;
-}
-function hasStar(key) {
-  return !!(data._stars && data._stars[key]);
-}
 
-function updateCounter() {
-  const count = Object.entries(data)
-    .filter(([k, v]) => !k.startsWith('_') && v === true)
-    .length;
-  document.getElementById('counter-num').textContent = count;
-}
-
-const MONTHS = ['January','February','March','April','May','June',
-                'July','August','September','October','November','December'];
-let viewYear  = new Date().getFullYear();
-let viewMonth = new Date().getMonth() + 1;
-
-function changeMonth(dir) {
-  viewMonth += dir;
-  if (viewMonth > 12) { viewMonth = 1; viewYear++; }
-  if (viewMonth < 1)  { viewMonth = 12; viewYear--; }
-  if (viewYear < 2026 || (viewYear === 2026 && viewMonth < 7)) {
-    viewYear = 2026; viewMonth = 7;
-  }
-  renderCalendar();
-}
-
-function renderCalendar() {
-  const todayK = todayKey();
-  const now    = new Date();
-  document.getElementById('month-label').textContent =
-    `${MONTHS[viewMonth-1]} ${viewYear}`;
-  const isMin = viewYear === 2026 && viewMonth === 7;
-  const isMax = viewYear === now.getFullYear() && viewMonth === now.getMonth()+1;
-  document.getElementById('prev-month').classList.toggle('disabled', isMin);
-  document.getElementById('next-month').classList.toggle('disabled', isMax);
-  const firstDow    = (new Date(viewYear, viewMonth-1, 1).getDay() + 6) % 7;
-  const daysInMonth = new Date(viewYear, viewMonth, 0).getDate();
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
-  for (let i = 0; i < firstDow; i++) {
-    grid.appendChild(document.createElement('div'));
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
-    const key      = mkKey(viewYear, viewMonth, d);
-    const future   = key > todayK;
-    const preStart = key < START_DATE;
-    const isToday  = key === todayK;
-    const checked  = data[key] === true;
-    const star     = hasStar(key);
-    const tappable = !future && !preStart;
-    const cell = document.createElement('div');
-    cell.className = [
-      'cal-day', 'in-month',
-      tappable ? 'tappable' : '',
-      isToday  ? 'is-today' : '',
-      checked  ? 'checked'  : ''
-    ].filter(Boolean).join(' ');
-    if (future)   cell.style.opacity = '0.18';
-    if (preStart) cell.style.opacity = '0.12';
-    const numEl = document.createElement('span');
-    numEl.className = 'day-num';
-    numEl.textContent = d;
-    cell.appendChild(numEl);
-    if (star) {
-      const starEl = document.createElement('span');
-      starEl.className = 'star-badge';
-      starEl.textContent = '⭐';
-      cell.appendChild(starEl);
-    }
-    if (tappable) cell.addEventListener('click', () => toggleDay(key));
-    grid.appendChild(cell);
-  }
-}
-
-function toggleDay(key) {
-  if (data[key]) {
-    delete data[key];
-  } else {
-    data[key] = true;
-    if (checkRunAt(key)) {
-      if (!data._stars) data._stars = {};
-      data._stars[key] = true;
-      showToast('⭐ 10 days in a row!');
-    } else {
-      showToast('Showed up ✓');
+  // ── MILESTONES ──
+  function computeMilestones() {
+    milestones = {};
+    var sortedDays = Object.keys(showed).filter(function(k) {
+      return showed[k] === true;
+    }).sort();
+    for (var i = 0; i < sortedDays.length; i++) {
+      var n = i + 1;
+      if (CAL_MILESTONES[n]) {
+        milestones[sortedDays[i]] = CAL_MILESTONES[n];
+      }
     }
   }
-  renderCalendar();
-  updateCounter();
-  saveData();
-}
 
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
-}
+  // ── HEADER ──
+  function updateHeader() {
+    var sortedDays = Object.keys(showed).filter(function(k) {
+      return showed[k] === true;
+    }).sort();
+    var total = sortedDays.length;
 
-function showSetup()  { document.getElementById('setup-overlay').classList.add('visible'); }
-function closeSetup() {
-  if (getToken()) document.getElementById('setup-overlay').classList.remove('visible');
-}
-function connectGitHub() {
-  const t = document.getElementById('setup-token-input').value.trim();
-  if (!t) return;
-  localStorage.setItem('gh_token', t);
-  document.getElementById('setup-overlay').classList.remove('visible');
-  init();
-}
+    document.getElementById('counterNum').textContent = total;
+    document.getElementById('chapterCount').textContent = total + ' / ' + TOTAL_DAYS;
 
-async function init() {
-  const r = await ghGet('data.json');
-  if (r) { dataSha = r.sha; if (r.content) data = r.content; }
-  updateCounter();
-  renderCalendar();
-  if (!getToken()) showSetup();
-}
+    var rewardsEarned = Math.floor(total / 10);
+    var nextMilestone = (rewardsEarned + 1) * 10;
+    var toGo = nextMilestone - total;
 
-init();
+    // Medals — always show 3, cycling
+    var medalsRow = document.getElementById('medalsRow');
+    medalsRow.innerHTML = '';
+    var cyclePos = rewardsEarned % 3; // 0,1,2 within current cycle
+    for (var i = 1; i <= 3; i++) {
+      var m = document.createElement('div');
+      m.className = i <= cyclePos ? 'medal' : 'medal unearned';
+      // If full cycle complete (rewardsEarned divisible by 3 and > 0), all lit
+      if (rewardsEarned > 0 && cyclePos === 0) m.className = 'medal';
+      m.textContent = '🎖️';
+      medalsRow.appendChild(m);
+    }
+
+    document.getElementById('medalLabel').innerHTML =
+      toGo + ' to next <span>' + CAL_MILESTONES[nextMilestone] + '</span>';
+  }
+
+  // ── DATE HELPERS ──
+  function todayKey() {
+    return dateKey(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+  }
+
+  function dateKey(y, m, d) {
+    return y + '-' +
+      (m + 1 < 10 ? '0' : '') + (m + 1) + '-' +
+      (d < 10 ? '0' : '') + d;
+  }
+
+  // ── TAP ──
+  function toggleDay(key) {
+    showed[key] = !(showed[key] === true);
+    computeMilestones();
+    updateHeader();
+    renderCalendar();
+    saveData();
+  }
+
+  // ── CALENDAR ──
+  function renderCalendar() {
+    var grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    document.getElementById('monthLabel').textContent =
+      MONTHS[viewMonth] + ' ' + viewYear;
+
+    document.getElementById('prevBtn').disabled =
+      (viewYear === 2026 && viewMonth <= CAL_START_MONTH);
+    document.getElementById('nextBtn').disabled =
+      (viewYear === TODAY.getFullYear() && viewMonth >= TODAY.getMonth());
+
+    var firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    var offset   = (firstDay + 6) % 7;
+    var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    var tKey = todayKey();
+
+    for (var cell = 0; cell < 42; cell++) {
+      var dayNum = cell - offset + 1;
+      var el = document.createElement('div');
+
+      if (dayNum < 1 || dayNum > daysInMonth) {
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+        continue;
+      }
+
+      var key  = dateKey(viewYear, viewMonth, dayNum);
+      var date = new Date(viewYear, viewMonth, dayNum);
+      date.setHours(0,0,0,0);
+      var isToday   = key === tKey;
+      var isFuture  = date > TODAY;
+      var isShowed  = showed[key] === true;
+      var milestone = milestones[key];
+
+      var cls = 'cal-day';
+      if (isFuture) {
+        cls += ' future';
+      } else if (milestone && isShowed) {
+        cls += ' milestone-day';
+      } else if (isShowed) {
+        cls += ' showed-up';
+      } else {
+        cls += ' past';
+      }
+      if (isToday) cls += ' today-ring';
+      el.className = cls;
+
+      if (!isFuture) {
+        (function(k) {
+          el.addEventListener('click', function() { toggleDay(k); });
+        })(key);
+      }
+
+      if (milestone && isShowed && !isFuture) {
+        var span = document.createElement('span');
+        span.className = 'day-milestone-icon';
+        span.textContent = milestone;
+        el.appendChild(span);
+      } else {
+        var numEl = document.createElement('div');
+        numEl.className = 'day-num';
+        numEl.textContent = dayNum;
+        el.appendChild(numEl);
+
+        if (!isFuture && isShowed) {
+          var tick = document.createElement('div');
+          tick.className = 'day-tick';
+          tick.textContent = '✓';
+          el.appendChild(tick);
+        }
+      }
+
+      grid.appendChild(el);
+    }
+  }
+
+  function changeMonth(dir) {
+    viewMonth += dir;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  }
+
+  // ── INIT ──
+  loadData();
 </script>
 </body>
 </html>
