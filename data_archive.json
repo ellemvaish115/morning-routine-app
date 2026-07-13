@@ -1,0 +1,245 @@
+{
+  "2026-05-16": {
+    "move": "rest",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-05-17": {
+    "move": "rest",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-05-18": {
+    "move": "rest",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-05-19": {
+    "move": "gym",
+    "wabi": false,
+    "sunpo": false,
+    "ma": true
+  },
+  "2026-05-20": {
+    "move": "treadmill",
+    "wabi": false,
+    "sunpo": false,
+    "ma": true
+  },
+  "2026-05-21": {
+    "move": "gym",
+    "wabi": false,
+    "sunpo": false,
+    "ma": true
+  },
+  "2026-05-22": {
+    "move": "rest",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-05-23": {
+    "move": "gym",
+    "ma": true
+  },
+  "2026-05-24": {
+    "wabi": true,
+    "move": "rest"
+  },
+  "2026-05-25": {
+    "move": "treadmill",
+    "wabi": false,
+    "sunpo": false,
+    "ma": true
+  },
+  "2026-05-26": {
+    "move": "gym",
+    "wabi": true,
+    "ma": true
+  },
+  "2026-05-27": {
+    "move": "rest",
+    "wakeTime": "10:30",
+    "wakeHow": "lay"
+  },
+  "2026-05-28": {
+    "move": "gym",
+    "wakeTime": "10:00",
+    "wakeHow": "lay"
+  },
+  "2026-05-29": {
+    "move": "floor",
+    "wakeTime": "8:00",
+    "wakeHow": "neg",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-05-30": {
+    "move": "floor",
+    "wakeTime": "9:00",
+    "wakeHow": "lay",
+    "getUpTime": "11:30"
+  },
+  "2026-05-31": {
+    "wakeTime": "7:00",
+    "getUpTime": "8:00",
+    "wakeHow": "neg",
+    "move": null
+  },
+  "2026-06-01": {
+    "move": "floor",
+    "wakeTime": "7:00",
+    "getUpTime": "8:30",
+    "wakeHow": "neg",
+    "sunpo": true,
+    "ma": true
+  },
+  "2026-06-02": {
+    "move": "gym",
+    "wakeTime": "7:00",
+    "getUpTime": "8:00",
+    "wakeHow": "neg"
+  },
+  "2026-06-03": {
+    "move": "floor",
+    "wakeTime": "9:00",
+    "getUpTime": "10:00",
+    "sunpo": true
+  },
+  "2026-06-04": {
+    "move": "gym",
+    "wakeTime": "9:30",
+    "getUpTime": "12:00"
+  },
+  "2026-06-05": {
+    "move": "floor",
+    "wakeTime": "9:00",
+    "getUpTime": "11:00",
+    "wakeHow": "lay",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-06-06": {
+    "move": "floor",
+    "wakeTime": "9:00",
+    "getUpTime": "9:30",
+    "wakeHow": "straight",
+    "wabi": false,
+    "sunpo": false,
+    "ma": false
+  },
+  "2026-06-07": {
+    "move": "rest",
+    "wakeTime": "8:30",
+    "getUpTime": "8:30",
+    "wakeHow": "straight"
+  },
+  "2026-06-08": {
+    "move": "floor",
+    "wakeTime": "10:00",
+    "getUpTime": "10:30",
+    "wakeHow": "neg",
+    "wabi": true
+  },
+  "2026-06-09": {
+    "move": "gym",
+    "wakeTime": "9:00",
+    "getUpTime": "10:30"
+  },
+  "2026-06-10": {
+    "move": "rest"
+  },
+  "2026-06-11": {
+    "move": "rest",
+    "wakeTime": "10:00",
+    "getUpTime": "12:00"
+  },
+  "2026-06-12": {
+    "move": "rest",
+    "wakeTime": "10:00",
+    "getUpTime": "12:00",
+    "wabi": true
+  },
+  "2026-06-13": {
+    "move": "floor",
+    "wakeTime": "10:00",
+    "getUpTime": "11:00",
+    "wakeHow": "straight",
+    "wabi": true
+  },
+  "2026-06-14": {
+    "move": "floor",
+    "wakeTime": "10:30",
+    "getUpTime": "11:30",
+    "wakeHow": "lay"
+  },
+  "2026-06-15": {
+    "wabi": true,
+    "wakeTime": "10:00",
+    "getUpTime": "10:30"
+  },
+  "2026-06-16": {
+    "move": "gym",
+    "wakeTime": "7:00",
+    "getUpTime": "7:30",
+    "wakeHow": "neg",
+    "ma": true
+  },
+  "2026-06-28": {
+    "move": "floor",
+    "wakeTime": "6:30",
+    "getUpTime": "7:00",
+    "wakeHow": "straight"
+  },
+  "2026-06-27": {
+    "move": "rest",
+    "wakeTime": "8:30",
+    "getUpTime": "12:00",
+    "wakeHow": "lay"
+  },
+  "2026-06-26": {
+    "move": "floor",
+    "wakeTime": "7:30",
+    "getUpTime": "8:00",
+    "wakeHow": "straight",
+    "sunpo": true
+  },
+  "2026-06-25": {
+    "move": "rest"
+  },
+  "2026-06-24": {
+    "move": "rest"
+  },
+  "2026-06-23": {
+    "move": "rest"
+  },
+  "2026-06-22": {
+    "move": "floor"
+  },
+  "2026-06-20": {
+    "move": "gym"
+  },
+  "2026-06-21": {
+    "move": "rest"
+  },
+  "2026-06-19": {
+    "move": "floor"
+  },
+  "2026-06-18": {
+    "move": "rest"
+  },
+  "2026-06-17": {
+    "move": "rest"
+  },
+  "2026-06-29": {
+    "move": "rest"
+  },
+  "2026-06-30": {
+    "move": "rest"
+  }
+}
